@@ -1,0 +1,75 @@
+# ######################################################################
+# Project:     PHPLinkDirectory: Version 2.1.2
+#
+# **********************************************************************
+# Copyright (C) 2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# **********************************************************************
+#
+# For questions, help, comments, discussion, etc., please join the
+# PHP Link Directory Forum http://www.phplinkdirectory.com/forum/
+#
+# @link           http://www.phplinkdirectory.com/
+# @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+# @projectManager David DuVal <david@david-duval.com>
+# @package        PHPLinkDirectory
+# ######################################################################
+
+
+*****************************************************************************
+***** Changelog for PHP Link Directory ver 2.1, created on Sep 24, 2006 *****
+*****************************************************************************
+Filename: phpLD-21.zip
+Author: Constantin Bejenaru / Boby <constantin_bejenaru@frozenminds.com> (http://www.frozenminds.com)
+
+
+Updates:
+   - [UPDATE] Smarty template engine upgraded to latest stable version (2.6.14)
+   - [UPDATE] SmartyValidate library upgraded to latest stable version (2.8)
+   - [UPDATE] AdoDB database library upgraded to latest stable version (4.92)
+   - [UPDATE] PHPMailer class upgraded to latest stable version (1.73)
+
+   - [UPDATE] New installer, works with PHP 5.x and PHP in CGI mode
+
+Removed:
+   - Reciprocal link ID validation and anything related to it
+
+Changes:
+   - Language file support
+   - Password is now encrypted using either SHA1 or MD5 hash
+   - Improved notification system
+   - Link ID problem fixed, HTML id element is not longer just a numeric value, it was changed to "id_{xyz}" or "id{xyz}" where {xyz} is the numeric link ID
+   - RSS feeds show only limited (links per page value) amount of links preventing timeouts
+   - Main page (index.php) PHP code reduced
+   - Main page (index.php) links count code changed to much faster and safer SQL command
+   - Most SQL commands are now correct and safe for DB input/output
+   - Valid XHTML markup and valid CSS
+   - Emails are sent with admin sender name and address
+   - Inactive categories are not shown anymore on submit page
+   - Allow multiple submit fixed
+   - Validation of reciprocal links improved
+   - Unencoded character problem fixed
+   - Symbolic links are now working with Mod Rewrite
+   - Subcategories preview sorted in alphabetical order
+   - Same title in multiple categories is now allowed
+   - Easy to read fonts for image verification
+   - Add folders and template files protection via htaccess and an additional default index.html file
+
+   - and many more ...
+
+
+Files changed:
+   - All files, PHP and template files (Please overwrite them all!!)

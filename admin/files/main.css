@@ -1,0 +1,433 @@
+/**
+# ######################################################################
+# Project:     PHPLinkDirectory: Version 2.1.2
+#
+# **********************************************************************
+# Copyright (C) 2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# **********************************************************************
+#
+# For questions, help, comments, discussion, etc., please join the
+# PHP Link Directory Forum http://www.phplinkdirectory.com/forum/
+#
+# @link           http://www.phplinkdirectory.com/
+# @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+# @projectManager David DuVal <david@david-duval.com>
+# @package        PHPLinkDirectory
+# ######################################################################
+*/
+
+
+* { outline: none; }
+body {
+    margin: 0;
+    padding: 0;
+    background: #FFFFFF;
+   text-align: center;
+}
+html,body {
+   height: 100%;
+   min-height:100%;
+}
+#page {
+   width: 980px;
+   height:100%;
+   min-height:100%;
+   background: #D8E1F3 url('../images/bg.gif') repeat-x top;
+   border-left: 1px solid black;
+   border-right: 1px solid black;
+   margin: 0 auto;
+   text-align: left;
+}
+div,p  { margin-top:0 }
+* html #content { height:1%; margin-bottom:12px }
+#content {
+   clear:both;
+   width: 958px;
+   text-align: left;
+   padding: 10px;
+   font-family: Verdana, Tahoma, Arial, sans-serif;
+   font-size: 8pt;
+}
+html>body #page { height:auto; }
+html>body #content { height:auto; }
+#content a, #content a:visited {
+   text-decoration: none;
+   color: #002285;
+}
+#content a:hover, #content a:active {
+   text-decoration: none;
+   color: #FF7800;
+}
+table {
+   width:100%;
+}
+td {
+   font-family: Verdana, Arial, sans-serif;
+   font-size: 8pt;
+   vertical-align: top;
+}
+div.menugradient {
+   background: #F2F0EA url('../images/menu_bg.gif');
+   width:980px;
+   border-bottom: 1px solid #FFFFFF;
+   margin: 0 auto;
+}
+div.bar {
+    border-bottom: 1px solid #b3ad9b;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 5px;
+    cursor: default;
+}
+p {
+    font-family: georgia, tahoma, verdana, arial, sans-serif;
+    font-size: 11px;
+    margin: 2em;
+}
+#mainMenu {
+   width: 100%;
+}
+h1 {
+   font-family: georgia, tahoma, verdana, arial, sans-serif;
+   color: #002285;
+   margin: 5px 0 0px 5px;
+   font-size: 14pt;
+}
+input.text {
+   font-size: 8pt;
+   color: #000000;
+   border: #5e74b3 1px solid;
+   background: #ffffff url('../images/input_bg.gif');
+   float: left;
+   height: 15px;
+   padding: 3px 0px 0px 4px;
+}
+textarea.text {
+   font-size: 8pt;
+   color: #000000;
+   border: #5e74b3 1px solid;
+   background: #ffffff url('../images/ta_bg.gif');
+   float: left;
+   padding: 3px 0px 0px 4px;
+}
+.formPage select {
+   font-size: 7pt;
+   color: #000;
+}
+.formPage {
+   vertical-align: top;
+}
+.formPage h2 {
+   font-family: verdana, arial, sans-serif;
+   color: #000;
+   margin: 5px 0 5px 0px;
+   font-size: 8pt;
+   padding-bottom: 3px;
+   background: url('../images/h_bg.gif') no-repeat left bottom;
+}
+.formPage .label {
+   padding: 3px 0 0 5px;
+   color: #002285;
+   text-align: right;
+}
+.smallDesc {
+   font-size: 7pt;
+   line-height: 1.5;
+   color: #4D68A1;
+}
+.action_btns {
+   margin:1em 0 1em 0;
+}
+.btn {
+   font-size: 8pt;
+   font-weight: bold;
+   border: 1px solid #8B2C2D;
+   background: #FFCC33;
+}
+div.err, span.err {
+   margin: 0px -1px 10px 1px;
+   padding: 3px;
+   color: #FF0000;
+   background: #EDF3FF;
+   border: #ccc 1px solid;
+   text-align: left;
+}
+.err h2 {
+   font-size: 8pt;
+   margin: 3px;
+   color: #A00000;
+}
+.err ul {
+   margin: 0px;
+   color: #A00000;
+}
+div.errForm, span.errForm {
+   margin: 0px 0 0px 5px;
+   padding: 2px 3px 2px 3px;
+   color: #FF0000;
+   background: #EDF3FF;
+   border: #cccccc 1px solid;
+   text-align: left;
+   clear: right;
+}
+div.err {
+   padding: 3px;
+}
+div.err img, .msg img {
+   margin: 3px 7px 3px 3px;
+   float: left;
+}
+.msg {
+   font-size: 10pt;
+   padding: 3px;
+   color: #0000FF;
+   background: #EDF3FF;
+   border: #cccccc 1px solid;
+   text-align: left;
+   vertical-align: top;
+}
+.info {
+   padding: 3px;
+   background: #EDF3FF;
+   border: #cccccc 1px solid;
+}
+#login {
+   width: 340px;
+   height:150px;
+   background: #fff;
+   border-left: 1px solid black;
+   border-right: 1px solid black;
+   border-top: 1px solid black;
+   margin: 0 auto;
+   text-align: center;
+}
+.ttl {
+   font-family: Verdana, Arial, sans-serif;
+   font-size: 10pt;
+   font-weight: bold;
+   height: 27px;
+   background: #F2F0EA url('../images/menu_bg.gif');
+   width:334px;
+   margin: 0 auto;
+   border-bottom: 1px solid #b3ad9b;
+   padding-top: 1px;
+   padding-bottom: 1px;
+   padding-left: 5px;
+   cursor: default;
+}
+#login-main {
+   font-family: Verdana, Arial, sans-serif;
+   font-size: 8pt;
+   background: #D8E1F3 url('../images/bg.gif') repeat-x top;
+   height: 119px;
+   margin: 1px 1px 0px 1px;
+}
+.list {
+   width: 100%;
+   border: 1px solid #b3ad9b;
+}
+.listHeader {
+   background:#f2f0ea url('../images/th_bg.gif') repeat-x top;
+   line-height:17px;
+   padding:2px 2px 2px 5px;
+   border-bottom:1px solid #b3ad9b;
+   cursor:pointer;
+   overflow:hidden;
+   text-align:left;
+}
+.list tr td.important {
+   font-weight:bold;
+}
+.listHeaderHover {
+   background: #faf9f4 url('../images/th_bg_on.gif') repeat-x top;
+   line-height: 17px;
+   padding: 2px 2px 2px 5px;
+   border-bottom: 1px solid #b3ad9b;
+   cursor: pointer;
+}
+.listHeader .rb, .listHeaderHover .rb {
+   float: right;
+   margin: -2px -3px -2px 0;
+   white-space: nowrap;
+   height: 20px;
+}
+.list tr.even td, .list tr.odd td, .list tr.featured td, .list tr.error td {
+   border-bottom: 1px solid #f1efe2;
+   border-right: 1px solid #f1efe2;
+   padding: 2px;
+}
+.list tr.even {
+   background: #fff;
+}
+.list tr.odd {
+   background: #F8F8FC;
+}
+
+.list tr.featured, .list td.featured {
+   background: #f0fff0;
+}
+.list tr.error, .list td.error {
+   color: #FF0000;
+   background: #EDF3FF;
+}
+.order {
+   margin-top: 4px;
+   float: left;
+}
+a.btn {
+   color: #000000;
+   text-decoration: none;
+   font-weight: bold;
+   background: #f1efe2 url('../images/th_bg.gif');
+   border: 1px solid #807b6f;
+   padding: 4px 4px 3px 4px;
+   vertical-align: bottom;
+}
+a.btn * {
+   vertical-align: bottom;
+}
+a.btn:hover {
+   color: #002285;
+   border: 1px solid #002285;
+}
+div.navig {
+   text-align: left;
+   color: #000000;
+   text-decoration: none;
+   font-weight: bold;
+   background: #fcfaf6;
+   padding: 1px 3px 3px 3px;
+   line-height: 18px;
+}
+div.navig * {
+   vertical-align: top;
+}
+.norec {
+   text-align: center;
+   background: #FFFFFF;
+   line-height: 70px;
+}
+p {
+   margin: 0 auto;
+   font-family: Verdana, Arial, sans-serif;
+   font-size: 8pt;
+}
+.progbar {
+   position: absolute;
+   background-image: url('../images/progbar-bg.gif');
+   background-repeat: no-repeat;
+   border: 1px solid #000000;
+   left: 50%;
+   height: 60px;
+   width: 514px;
+   margin-left: -259px;
+   top: 69px;
+}
+.progspacer {
+   height: 60px;
+   width: 514px;
+}
+span.req {
+   margin-left: 3px;
+   color: #FF0000;
+   font-weight: bold;
+}
+div.version {
+   margin: 0px -1px 10px 1px;
+   padding: 3px;
+   color: #00A000;
+   background: #EDF3FF;
+   border: 1px solid #A0A0A0;
+   text-align: left;
+}
+.tt {
+   position: absolute;
+   z-index: 100;
+   display: none;
+   background: #fffee4;
+   border: 1px solid #cbb99d;
+   padding: 3px;
+}
+.ttt {
+   border-top: 1px solid #f1efe2;
+   border-left: 1px solid #f1efe2;
+}
+.ttt td {
+   border-bottom: 0px none;
+   border-right: 0px none;
+   border-left: 0px none;
+}
+.pop-list {
+   position: absolute;
+   z-index: 1;
+   display: none;
+   background-color: #fffee4;
+   border: 1px solid #cbb99d;
+   padding: 5px;
+}
+.pop-list h2 {
+   font-size: 8pt;
+   font-weight: normal;
+   margin: 0;
+}
+.pop-list p {
+   border: none;
+}
+table.news {
+   margin-top: 10px;
+   width: 100%;
+   border: 1px solid #b3ad9b;
+   background: #fcfaf6;
+}
+td.title {
+   background: #EDF3FF;
+   border-bottom: 1px solid #e5e4d8;
+   padding: 3px;
+   font-weight: bold;
+}
+td.body {
+   padding: 3px;
+}
+span.date {
+   font-weight: normal;
+   float: right;
+}
+.noborder {
+   border-width:0;
+}
+.title_small {
+   font-weight:bold;
+   font-style:italic;
+}
+.notice {
+   font-weight:normal;
+   font-style:italic;
+}
+.paging-links,
+.paging-info {
+   text-align:right;
+}
+.paging-info {
+   font-style: italic;
+}
+#wrap {
+   width:50%;
+   height:50%;
+   margin:10px auto;
+   position:relative;
+   vertical-align:middle;
+}  

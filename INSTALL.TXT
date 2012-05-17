@@ -1,0 +1,99 @@
+# ######################################################################
+# Project:     PHPLinkDirectory: Version 2.1
+#
+# **********************************************************************
+# Copyright (C) 2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# **********************************************************************
+#
+# For questions, help, comments, discussion, etc., please join the
+# PHP Link Directory Forum http://www.phplinkdirectory.com/forum/
+#
+# @link           http://www.phplinkdirectory.com/
+# @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+# @projectManager David DuVal <david@david-duval.com>
+# @package        PHPLinkDirectory
+# ######################################################################
+
+
+
+************************
+** BASIC INSTALLATION **
+************************
+
+1. Upload the files in the archive to your host.
+
+2. Change permissions on the following file and four folders to 777 (writing permissions):
+      - include/config.php
+      - temp/
+      - temp/adodb
+      - temp/cache
+      - temp/templates
+
+   If the folders do not exist please create them.
+
+3. Access the installer/updater by trying to go to the directory.
+   It should forward you to http://www.your-domain.com/install/ ,
+   if it doesn't try typing in the URL directly.
+
+   For example, if you installed the directory in a sub folder
+   of your domain it may look like this:
+      http://www.your-domain.com/directory/install/
+
+4. Run through the self explained setup, if you have any questions,
+   comments or suggestions stop by the forum:
+      http://www.phplinkdirectory.com/forum/
+
+5. As a security measure, we recommend you change back permissions
+   to 755 on the file:
+      - include/config.php
+
+   You can also remove the entire "install" folder.
+   If you want to (re)install/update on a later point, you can upload
+   the folder again.
+
+
+***********************************
+** UPDATE FROM ANY PRIOR VERSION **
+***********************************
+
+1. Replace all files and folders
+
+2. Make sure if you have other PHP files with validation checks to change them accordingly.
+   In any previous version you will have something like:
+
+   ------------------------------
+   SmartyValidate :: register_validator('v_FIELD', 'FIELD', 'notEmpty', false, false, false, 'trim', 'formID');
+   ------------------------------
+
+   Because of changes to the SmartyValidate library, you need to remove the 7-th attribute and use always something like:
+
+   ------------------------------
+   SmartyValidate :: register_validator('v_FIELD', 'FIELD', 'notEmpty', false, false, 'trim', 'formID');
+   ------------------------------
+
+3. Check your templates for correct validation tags and fields. Validation tags are:
+
+   ------------------------------
+   {validate form="formID" id="v_FIELD" message=$smarty.capture.ERROR-MESSAGE}
+   ------------------------------
+
+
+
+Thank you for choosing PHP Link Directory!
+
+Kind Regards,
+   the PHP Link Directory Team!

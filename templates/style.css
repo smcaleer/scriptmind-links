@@ -1,0 +1,53 @@
+/* Style */
+@import "css/reset.css";
+@import "css/21px.css";
+@import "css/2c-l-fixed.css";
+@import "css/drop-downs.css";
+@import "css/screen.css";
+
+body{color:#444;}
+
+#categories h3, #categories h4{font-weight:normal;}
+.categories{width:50%;float:left;}
+.categories h3 a,.categories h3 a:visited,.categories h4 a,.categories h4 a:visited{color:#224;}
+.categories h4{margin-bottom:11px;}
+
+
+div#content div.content{width:640px;}
+#search{float:right;}
+
+#pagenavi{margin-bottom:20px;clear:both;}
+#pagenavi .page, #pagenavi .pages, #pagenavi a, #pagenavi .next, #pagenavi .previous{border:1px solid #CCCCCC;margin-right:6px;padding:3px 9px;}
+#pagenavi .current{font-weight:bold;}
+
+.link {margin-bottom:15px;margin-top:10px;border:thin dotted #ccc; padding:10px;position:relative;}
+.link .read-more{background:#eee;padding:5px}
+.link .read-more:hover{background:#d6d6d6;color:#21759B}
+.link .col1{width:50px;float:left;}
+.link .col2{margin-left:50px;}
+.link .read-more{position:absolute;right:8px;bottom:8px;}
+
+#reCaptcha div {margin: 0 auto;}
+.error {display:block;}
+
+/* Form */
+label {display: inline-block; float: left; line-height: 26px; width: 155px; font-size: 1em; }
+input, textarea, select { width: 400px; padding: 5px; color: #666; background: #f5f5f5; border: 1px solid #ccc; margin: 5px 0; font:1.2em "Lucida Grande", "Lucida Sans Unicode", Arial, sans-serif; -moz-border-radius: 5px; -webkit-border-radius:5px; }   
+select {width:412px;}
+input:focus, textarea:focus, select:focus { border: 1px solid #999; background-color: #fff; color:#333; }
+input.submit { cursor: pointer; border: 1px solid #222; background:#333; color:#fff; -moz-border-radius: 5px; -webkit-border-radius:5px; }
+input.submit:hover { background:#444; }
+fieldset { padding:20px; border:1px solid #eee; -moz-border-radius: 5px; -webkit-border-radius:5px; margin-bottom:15px; }
+legend { padding:7px 10px; color:#000; border:1px solid #eee; -moz-border-radius: 5px; -webkit-border-radius:5px; }
+input[type=radio]{width:20px;}
+label{clear:both;}
+input[type=image]{width:auto;}
+/*IE fix*/
+input[type=radio]{background:none;border:none}
+/* ReCaptcha Fix */
+#reCaptcha label{line-height:normal;}
+/* Search Bar fix */
+#search input{padding:5px; margin:0; font-size:1em;}
+#search input.text{width:200px;}
+
+#page-nav ul ul li {width:175%;}
