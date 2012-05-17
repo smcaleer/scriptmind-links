@@ -39,7 +39,7 @@ $tpl->clear_all_cache();
 //Clear all compiled template files
 $tpl->clear_compiled_tpl();
 
-$url = get_url('http://api.gplld.com/version/', URL_CONTENT, $_SERVER['SERVER_NAME'].request_uri());
+$url = get_url('http://api.scriptmind.org/version/', URL_CONTENT, $_SERVER['SERVER_NAME'].request_uri());
 $sv  = parse_version($url['content']);
 $cv  = parse_version(CURRENT_VERSION);
 
@@ -52,7 +52,7 @@ if ($sv > $cv)
 }
 else
 {
-   $version = _L('Your installation is up to date, no updates are available for your version of gplLD.');
+   $version = _L('Your installation is up to date, no updates are available for your version of ScriptMind::Links.');
    $tpl->assign('update_available', 0);
 }
 
@@ -74,7 +74,7 @@ $stats[5] = $db->GetOne("SELECT COUNT(*) FROM `{$tables['email_tpl']['name']}`")
 //phpLinkDirectory News
 if (ENABLE_NEWS)
 {
-   $url = get_url("http://api.gplld.com/news/", URL_CONTENT);
+   $url = get_url("http://api.scriptmind.org/news/", URL_CONTENT);
    if ($url['status'])
    {
       $news = parse_news($url['content']);

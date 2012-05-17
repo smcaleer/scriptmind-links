@@ -7,7 +7,7 @@
    <!-- <link rel="stylesheet" type="text/css" href="install.css" /> -->
    	{* CSS Style file *}
    <link rel="stylesheet" type="text/css" href="{$smarty.const.DOC_ROOT}/templates/install/style.css" />
-   
+
    <meta name="robots" content="noindex, nofollow" />
    <meta name="generator" content="PHP Link Directory {$VERSION}" />
    <script type="text/javascript" src="install.js"></script>
@@ -16,7 +16,7 @@
 <div id="body-container">
 <div id="header-container">
 <div id="header">
-<h1 id="site-title">gplLD Installer</h1>
+<h1 id="site-title">ScriptMind::Links Installer</h1>
 <h2 id="site-description">{$title}</h2>
 <div id="container">
 <div id="content">
@@ -44,7 +44,7 @@
 {elseif $step eq 2}
 
 <h2>
-	{l}Thank you for choosing gplLD. gplLD was developed to help create and maintain a link directory. Keep up-to-date by visiting the gplLD <ahref="http://www.gplld.com">homepage</a>.{/l}
+	{l}Thank you for choosing ScriptMind::Links. ScriptMind::Links was developed to help create and maintain a link directory. Keep up-to-date by visiting the ScriptMind::Links <ahref="http://www.scriptmind.org">homepage</a>.{/l}
 </h2>
 <h2>{l}Requirements{/l}</h2>
 <table id="requirements" border="0" cellpadding="0" cellspacing="0">
@@ -173,7 +173,7 @@
 <h3>{l}YOU MUST DELETE THE FOLLOWING FILE(S) BEFORE CONTINUING:{/l} <em>{$smarty.const.DOC_ROOT}/install/index.php</em></h3>
 <h3>{l}YOU MUST DROP WRITING PERMISSIONS TO FOLLOWING FILE(S) BEFORE CONTINUING:{/l} <em>{$smarty.const.DOC_ROOT}/include/config.php</em></h3>
 {/if}
-        
+
 {if $btn_back}
  <input type="submit" name="submit" value="back" title="{l}Go to previous step{/l}" accesskey="b" class="button" />
 {/if}
@@ -185,7 +185,7 @@
 {if $btn_restart}
  <input type="submit" name="submit" value="restart" title="{l}Restart installation/update process.{/l}" accesskey="r" class="button" />
 {/if}
-      
+
 </form>
 </div> <!-- #content -->
 </div> <!-- #container -->

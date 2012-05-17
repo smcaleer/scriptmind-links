@@ -17,11 +17,11 @@
 		<div class="widget-inside">
 			<h3 class="widget-title">Links</h3>
 			<ul class="xoxo">
-				<li><a title="GPL Link Directory" href="http://www.gplld.com">gplLD</a></li>
-				<li><a title="gplLD Support Forums" href="http://www.gplld.com/forums/">gplLD Support Forums</a></li>
-				<li><a title="gplLD Themes" href="http://www.gplld.com/extend/themes/">gplLD Themes</a></li>
-				<li><a title="gplLD Plugins" href="http://www.gplld.com/extend/plugins/">gplLD Plugins</a></li>
+				<li><a title="ScriptMind::Links" href="http://www.scriptmind.org/">gplLD</a></li>
+				<li><a title="ScriptMind::Links Support Forums" href="http://www.scriptmind.org/">ScriptMind::Links Support Forums</a></li>
+				<li><a title="ScriptMind::Links Themes" href="http://www.scriptmind.org/">ScriptMind::Links Themes</a></li>
+				<li><a title="ScriptMind::Links Plugins" href="http://www.scriptmind.org/">ScriptMind::Links Plugins</a></li>
 			</ul><!-- .xoxo -->
 		</div>
-		
+
 </div>

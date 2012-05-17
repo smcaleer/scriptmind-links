@@ -16,7 +16,7 @@
 			&copy; {php} echo date('Y'); {/php} {$smarty.const.DIRECTORY_TITLE}
 		</p>
 		<p class="credit">
-			Powered by <a href="http://www.gplld.com" title="GPL Link Directory Script">gplLD</a>
+			Powered by <a href="http://www.scriptmind.org" title="ScriptMind::Links Script">ScriptMind::Links</a>
 		</p>
 	</div> <!-- #footer -->
 </div> <!-- #footer-container -->
