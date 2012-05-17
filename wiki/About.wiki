@@ -1,0 +1,18 @@
+#summary About ScriptMind::Links
+
+= Introduction =
+
+ScriptMind::Links is a PHP application for building web directories.
+
+
+= Requirements =
+  * PHP 5.3 or later
+  * MySQL 5.0
+  * A web server - developed on Apache
+
+= Background =
+ScriptMind::Links is a fork of the [http://code.google.com/p/gplld/ gplLD - Web Directory Project] and will aim to produce a link directory fully compatible with more modern web server software before adding new facilities.
+
+ScriptMind::Links is a project of [http://www.scriptmind.org ScriptMind.Org].
+
+<g:plusone></g:plusone>
