@@ -1,0 +1,19 @@
+/*
+** -------------------------------------------------
+**
+**   Explorer.css (extends main.css)
+**
+**   Author: Michael F. S. Christensen
+**
+**   Internet Explorer specific CSS
+**   Non-Valid CSS2 stylesheet (www.w3c.org)
+**
+** -------------------------------------------------
+*/
+
+div.menugradient
+{
+    background: #F2F0EA;
+    width:100%;
+    filter:progid:DXImageTransform.Microsoft.Gradient (GradientType=1,StartColorStr='#F3F4F6',EndColorStr='#EFEAD8');
+}

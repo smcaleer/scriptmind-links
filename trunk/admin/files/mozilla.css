@@ -1,0 +1,18 @@
+/*
+** -------------------------------------------------
+** 
+**   Mozilla.css (extends menu.css)
+**
+**   Author: Michael F. S. Christensen
+**
+**   Mozilla/Netscape specific CSS
+**   Non-Valid CSS2 stylesheet (www.w3c.org)
+**
+** -------------------------------------------------
+*/
+
+.XulMenu {
+    font-family: georgia, tahoma, verdana, arial, sans-serif;
+    font-size: 11px;
+    -moz-user-select: none;
+}
