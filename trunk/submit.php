@@ -33,7 +33,7 @@
 
 require_once 'init.php';
 # Load reCaptcha
-require_once 'libs/recaptcha/recaptchalib.php';  
+require_once 'libs/recaptcha/recaptchalib.php';
 
 
 //Make an additional check if client is allowed to post/submit
@@ -42,9 +42,9 @@ require_once 'include/check_post_rules.php';
 $post_rules_unauthorized = check_post_rules($_POST);
 
 //Evaluate payment options
+$price = array ();
 if (PAY_ENABLE == '1' && PAYPAL_ACCOUNT != '')
 {
-	$price = array ();
 	if (FTR_ENABLE == '1' && PAY_FEATURED > 0)
    {
 		$price['featured'] = PAY_FEATURED;
@@ -57,18 +57,17 @@ if (PAY_ENABLE == '1' && PAYPAL_ACCOUNT != '')
 			$price['free'] = 0;
 		}
 	}
-	
+
    if (FTR_ENABLE == 1 && PAY_FEATURED_PLUS > 0)
       $price['featured_plus'] = PAY_FEATURED_PLUS;
-      
+
    if (PAY_NORMAL_PLUS > 0)
       $price['normal_plus'] = PAY_NORMAL_PLUS;
-      
-	if (PAY_RECPR > 0)
+
+	if (PAY_RECPR > -1)
    {
 		$price['reciprocal'] = PAY_RECPR;
 	}
-	$tpl->assign('price', $price);
 
 	if (isset ($_REQUEST['LINK_TYPE']))
    {
@@ -88,7 +87,8 @@ if (PAY_ENABLE == '1' && PAYPAL_ACCOUNT != '')
 	}
    else
    {
-		$recpr_required = 0;
+		$link_type = 'reciprocal';
+		$recpr_required = REQUIRE_RECIPROCAL;
 	}
 	$_SESSION['SmartyValidate']['submit_link']['validators'][6]['empty'] = ($recpr_required ? 0 : 1);
 	$_SESSION['SmartyValidate']['submit_link']['validators'][7]['empty'] = ($recpr_required ? 0 : 1);
@@ -96,7 +96,13 @@ if (PAY_ENABLE == '1' && PAYPAL_ACCOUNT != '')
 else
 {
 	$recpr_required = REQUIRE_RECIPROCAL;
+		$price['reciprocal'] = 0;
+        if( ! $recpr_required ) {
+            $price[ 'free' ] = 0;
+        }
+    $link_type =  $recpr_required ? 'reciprocal' : 'free';
 }
+$tpl->assign('price', $price);
 $tpl->assign('recpr_required', $recpr_required);
 
 //Determine category
@@ -145,8 +151,8 @@ if (empty ($_REQUEST['submit']))
    // Deeplink URL Validation
    for($dl=1; $dl<=5; $dl++)
    SmartyValidate :: register_validator('v_DEEPLINK_URL' . $dl, 'URL' . $dl, 'isURL' , true, false, 'trim', 'submit_link');
-   
-   
+
+
 }
 else
 {
@@ -171,7 +177,7 @@ else
 	$data['DESCRIPTION'] = strip_tags($data['DESCRIPTION']);
 	$data['TITLE'] = strip_tags($data['TITLE']);
 	$data['OWNER_NAME'] = strip_tags($data['OWNER_NAME']);
-	
+
    if (strlen (trim ($data['URL'])) > 0 && !preg_match ('#^http[s]?:\/\/#i', $data['URL']))
       $data['URL'] = "http://".$data['URL'];
 
@@ -186,10 +192,10 @@ else
 		$tpl->assign('reCaptchaError', 1);
 	else
 		$tpl->assign('reCaptchaError', $rc_resp);
-	
+
 	if (SmartyValidate :: is_valid($data, 'submit_link') && ($rc_resp === true))
    {
-		
+
 
 		if (ENABLE_PAGERANK)
       {
