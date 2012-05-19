@@ -35,6 +35,9 @@
       <span id="tRURL{$id}" class="tt">{$row.$col}</span>
     {elseif $col eq 'DATE_ADDED'}
       <td>{$row.$col|date_format:$date_format}
+    {elseif $col eq 'EXTRA'}
+  		<td><a class="htt" id="T{$id}" href="javascript:void();">...</a>
+  		{include file="admin/link_extras.tpl" id=$id link=$link}
   	{else}
   		<td>{$row.$col}&nbsp;
   	{/if}

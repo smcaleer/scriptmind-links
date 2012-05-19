@@ -42,22 +42,26 @@ $tpl->assign('columns', array ('TITLE' => _L('Title'),
 								'CATEGORY' => _L('Category'),
 								'RECPR_URL' => _L('Recpr. Link URL'),
 								'DATE_ADDED' => _L('Date Added'),
-								'TITLE1' => _L('Title 1'),
-								'TITLE2' => _L('Title 2'),
-								'TITLE3' => _L('Title 3'),
-								'TITLE4' => _L('Title 4'),
-								'TITLE5' => _L('Title 5'),
+								'EXTRA' => _L('Extra'),
+));
+
+$tpl->assign('extra_fields', array(
 								'URL1' => _L('URL 1'),
-								'URL2' => _L('URL 2'),
-								'URL3' => _L('URL 3'),
-								'URL4' => _L('URL 4'),
-								'URL5' => _L('URL 5'),
+								'TITLE1' => _L('Title 1'),
 								'DESCRIPTION1' => _L('Description 1'),
+								'URL2' => _L('URL 2'),
+								'TITLE2' => _L('Title 2'),
 								'DESCRIPTION2' => _L('Description 2'),
+								'URL3' => _L('URL 3'),
+								'TITLE3' => _L('Title 3'),
 								'DESCRIPTION3' => _L('Description 3'),
+								'URL4' => _L('URL 4'),
+								'TITLE4' => _L('Title 4'),
 								'DESCRIPTION4' => _L('Description 4'),
+								'URL5' => _L('URL 5'),
+								'TITLE5' => _L('Title 5'),
 								'DESCRIPTION5' => _L('Description 5'),
-								
+
 ));
 
 if (defined('SORT_FIELD') && SORT_FIELD != '')
