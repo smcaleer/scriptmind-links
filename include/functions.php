@@ -590,28 +590,50 @@ function get_url($url, $what = 0, $referer = "", $cookies = array (), $useragent
 
 function parse_news($str)
 {
-   $str = str_replace ("\r\n", "\n", $str);
-   $str = str_replace ("\r", "\n", $str);
-   $str = explode ("\n", $str);
-   $news = array ();
-   $len = count ($str);
-   $i = 0;
-   while ($i < $len)
-   {
-      if ($str[$i] == '')
-      {
-         $i ++;
-         continue;
-      }
-      $n = array ();
-      $n['title'] = $str[$i ++];
-      $n['date'] = $str[$i ++];
-      while ($i < $len &&$str[$i] != '')
-         $n['body'] .= $str[$i ++]."\n";
-      $news[] = $n;
-      $i ++;
-   }
-   return $news;
+    $start = stripos( $str, 'STARTNEWS--> </p>' );
+    if( $start > 0 )
+        $str = substr( $str, $start + 17);
+    else {
+        $start = stripos( $str, 'STARTNEWS-->' );
+        if( $start > 0 )
+            $str = substr( $str, $start + 12);
+        else {
+            $start = stripos( $str, '<body>' );
+            if( $start > 0 )
+                $str = substr( $str, $start + 6);
+        }
+    }
+
+    $end = stripos( $str, '<!--ENDNEWS-->');
+    if( $end > 0 )
+        $str = substr( $str, 0, $end );
+    else {
+        $end = stripos( $str, '</body>');
+        if( $end > 0 )
+            $str = substr( $str, 0, $end );
+    }
+    $answer = array();
+    $items = preg_split( '/<h2>/', $str, -1, PREG_SPLIT_NO_EMPTY );
+    foreach( $items as $item ) {
+        // Parse <a name="PHP_Version_Changed"></a>PHP Version Changed<a href="#PHP_Version_Changed" class="section_anchor"></a></h2><p>19 May 2012 ScriptMind::Links now uses ADOdb version 517 and as a result requires the PHP version to be at least 5.2 </p>
+        $item = substr( $item, stripos(  $item, '</a>') + 4 );
+        $split = stripos(  $item, '<a ');
+        $title = substr( $item, 0, $split );
+        $split = stripos(  $item, '</h2><p>' ) + 8;
+        $item = substr( $item, $split );
+        if( substr( $item, -4 ) == '</p>') {
+           $item = substr( $item, 0, -4 );
+        }
+        preg_match('/(\d+)\s*(\w+)\s*(\d+)\s*(\S.*)$/', $item, $match);
+        if(is_array($match) && count( $match ) > 4 ) {
+            $answer[] = array (
+                'title' => $title,
+                'date' => $match[1] . " " . $match[2] . " " . $match[3],
+                'body' => $match[ 4 ]
+            );
+        }
+    }
+    return $answer;
 }
 
 function check_allowed_feat($CategID=0)
@@ -693,7 +715,7 @@ function checkUrlUnique($table, $field, $value, $exclude_id = NULL, $parent_fiel
    }
 
    return 1;
-}  
+}
 
 function check_unique($table, $field, $value, $exclude_id = NULL, $parent_field = NULL, $parent_value = NULL, $exclude_from_field = NULL, $exclude_value = NULL)
 {
@@ -746,10 +768,31 @@ function validate_not_equal_var($value, $empty, &$params, &$form)
 
 function parse_version($val)
 {
-	preg_match('`(\d+)\.(\d+)\.(\d+)\s*((RC)(\d+))?`', $val, $match);
-	$ver = sprintf("%02d%02d%02d%02d", $match[1], $match[2], $match[3], $match[6]);
+    $start = strpos($val, '<tt>');
+    if( $start > 0 ) {
+        $val=  substr($val, $start+4);
+        $end = strpos( $val, "</tt>");
+        if( $end > 0 )
+            $val = substr( $val, 0, $end );
+        $val = '`'.$val.'`';
+    } else if( FALSE===strpos($val, '`'))
+        $val = '`'.$val.'`';
+    preg_match('`(\d+)\.(\d+)\.(\d+)\s*((RC)(\d+))?`', $val, $match);
+    $ver = sprintf("%02d%02d%02d%02d", $match[1], $match[2], $match[3], $match[6]);
 
 	return $ver;
+}
+
+function format_version( $val ) {
+    $rc = $val % 100;
+    $val = ($val - $rc )/100;
+    $rc = ( $rc > 0 ) ? "RC".$rc : "";
+    $rev = $val % 100;
+    $val = ($val - $rev )/100;
+    $minor = $val % 100;
+    $major = ($val - $minor )/100;
+    $answer = sprintf( "%d.%d.%d%s", $major, $minor, $rev, $rc);
+    return $answer;
 }
 
 if (!function_exists ('file_get_contents'))
