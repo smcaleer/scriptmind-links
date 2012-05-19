@@ -1,0 +1,15 @@
+#summary News to be shown on the admin/index.php page of copies.
+<wiki:comment>
+
+IMPORTANT: This page will be shown after login to the admin area of ScriptMind::Links.
+Please keep the content short and relevant.
+
+Order latest first. Trim old entries
+</wiki:comment>
+== PHP Version Changed ==
+19 May 2012 ScriptMind::Links now uses ADOdb version 517 and as a result requires the PHP version to be at least 5.2
+
+== News and Version Checking ==
+19 May 2012 The news displayed on the Administrator login is now read from the project wiki on Google Code.
+
+The latest released version now also read from the project wiki.
