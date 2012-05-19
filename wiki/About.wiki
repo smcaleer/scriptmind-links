@@ -1,4 +1,5 @@
 #summary About ScriptMind::Links
+#labels Featured
 
 = Introduction =
 
