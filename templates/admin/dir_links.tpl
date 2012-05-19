@@ -27,7 +27,7 @@
   		<td>
   		<a href="javascript:void(0);" class="pop" id="S{$id}" ><img src="images/stat_{$val}.gif" width="9" height="9" border="0"/> {$stats[$val]}</a>
   		<div class="pop-list" id="pS{$id}">
-  			<span>Set new status:</span>
+  			<span>Set new status:</span><br/>
   			{foreach from=$stats item=v key=k}
   			{if $k ne $val and $k ne 1}
   				<a href="dir_links_edit.php?action=S:{$id}:{$k}"><img src="images/stat_{$k}.gif" width="9" height="9" border="0"/> {$stats[$k]}</a><br />
