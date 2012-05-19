@@ -6,7 +6,7 @@
 <table border="0" cellpadding="0" cellspacing="0" class="list">
   <tr>
   {foreach from=$columns key=col item=name}
-  <th id="{$col}">
+  <th class="listHeader" id="{$col}">
   {if $SORT_FIELD eq $col}
   	{if $SORT_ORDER eq 'ASC'}
   		<img src="images/sort_a.gif" width="16" height="9" class="order"/>

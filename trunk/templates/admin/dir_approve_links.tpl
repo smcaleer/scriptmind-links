@@ -2,7 +2,7 @@
 <table border="0" cellpadding="0" cellspacing="0" class="list">
   <tr>
   {foreach from=$columns key=col item=name}
-  <th id="{$col}">
+  <th class="listHeader" id="{$col}">
   {if $SORT_FIELD eq $col}
   	{if $SORT_ORDER eq 'ASC'}
   		<img src="images/sort_a.gif" width="16" height="9" class="order"/>
@@ -48,11 +48,11 @@
     <td align="center"><a href="dir_links_edit.php?action=D:{$id}" onclick="return link_rm_confirm('{l}Are you sure you want to remove this link?{/l}\n{l}Note: links can not be restored after removal!{/l}');" title="{l}Remove Link{/l}: {$row.TITLE|escape|trim}"><img src="images/a_delete.gif" width="16" height="13" border="0" alt="Delete" /></a></a></td>
  {foreachelse}
  <tr>
- 	<td colspan="9" class="norec">{l}No records found.{/l}</td>
+ 	<td colspan="10" class="norec">{l}No records found.{/l}</td>
  </tr>
  {/foreach}
  <tr>
- 	<td colspan="9" class="norec">{include file="admin/list_pager.tpl"}</td>
+ 	<td colspan="10" class="norec">{include file="admin/list_pager.tpl"}</td>
  </tr>
 </table>
 
