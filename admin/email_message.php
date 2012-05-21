@@ -35,7 +35,7 @@ require_once 'init.php';
 
 if ($_REQUEST['action'])
 {
-	list ($action, $id) = split (':', $_REQUEST['action']);
+	list ($action, $id) = explode(':', $_REQUEST['action']);
 }
 
 $tpl->assign('columns', array ('TITLE' => _L('Title'), 'TPL_TYPE' => _L('Type'), 'SUBJECT' => _L('Subject')));
@@ -56,7 +56,7 @@ $content = $tpl->fetch('admin/email_message.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
 echo $tpl->fetch('admin/main.tpl');

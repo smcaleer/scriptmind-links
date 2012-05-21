@@ -273,7 +273,7 @@ $topcats = $db->GetAll("SELECT * FROM `{$tables['category']['name']}` WHERE `STA
 $tpl->assign('topcats', $topcats);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
 echo $tpl->fetch('submit.tpl', $id);

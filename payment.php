@@ -205,7 +205,7 @@ $tpl->assign($data);
 $tpl->assign('payment_um', $payment_um);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 if ($action == 'paypal')
 {

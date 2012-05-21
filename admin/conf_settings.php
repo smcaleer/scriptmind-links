@@ -51,7 +51,7 @@ if (empty ($_REQUEST['submit']))
 			$conf[$k]['VALUE'] = $conf_vals[$row['ID']];
 		}
 	}
-
+    $tpl->assign('opt_bool', array(1 => $tpl->translate('Yes'), 0 => $tpl->translate('No')));
 	SmartyValidate :: connect($tpl);
 	SmartyValidate :: register_form('conf_settings', true);
 
@@ -124,7 +124,7 @@ foreach ($conf as $i => $val)
    if ($conf[$i]['TYPE']=='LKP' && is_string ($conf[$i]['OPTIONS']))
    {
       $rs = $db->Execute($conf[$i]['OPTIONS']);
-      $conf[$i]['OPTIONS'] = array ('0' => _L('<Select an option>')) + $rs->GetAssoc();
+      $conf[$i]['OPTIONS'] = array ('0' => _L('&lt;Select an option&gt;')) + $rs->GetAssoc();
    }
 }
 
@@ -135,7 +135,7 @@ $content = $tpl->fetch('admin/conf_settings.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
 echo $tpl->fetch('admin/main.tpl');

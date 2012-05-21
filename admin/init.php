@@ -35,7 +35,9 @@ require_once '../include/version.php';
 require_once '../include/config.php';
 require_once 'include/tables.php';
 require_once 'include/functions.php';
-require_once 'libs/intsmarty/intsmarty.class.php';
+if( defined('USE_INTSMARTY' ) )
+    require_once 'libs/intsmarty/intsmarty.class.php';
+require_once 'include/functions.php';
 require_once 'libs/smarty/SmartyValidate.class.php';
 require_once 'libs/adodb/adodb.inc.php';
 
@@ -530,7 +532,7 @@ $conf = array(
 			  'CONFIG_GROUP' => '9',
 			  'TYPE' => 'STR',
 			  'REQUIRED' => '1'),
-			  
+
 		#reCaptcha
 		array('ID' => 'RECAPTCHA_PUBLIC_KEY',
 			  'NAME' => _L('reCaptcha Public Key'),

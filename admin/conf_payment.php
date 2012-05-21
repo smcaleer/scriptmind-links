@@ -34,7 +34,7 @@
 require_once 'init.php';
 
 if ($_REQUEST['action'])
-   list ($action, $id, $val) = split(':', $_REQUEST['action']);
+   list ($action, $id, $val) = explode(':', $_REQUEST['action']);
 
 switch ($action)
 {
@@ -91,7 +91,7 @@ $content = $tpl->fetch('admin/conf_payment.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
 echo $tpl->fetch('admin/main.tpl');

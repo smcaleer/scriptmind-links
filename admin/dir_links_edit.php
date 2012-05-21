@@ -40,7 +40,7 @@ if (empty ($_REQUEST['submit']) && !empty ($_SERVER['HTTP_REFERER']))
 $tpl->assign('ENABLE_REWRITE', ENABLE_REWRITE);
 if ($_REQUEST['action'])
 {
-	list ($action, $id, $val) = split (':', $_REQUEST['action']);
+	list ($action, $id, $val) = explode(':', $_REQUEST['action']);
 }
 $tpl->assign('stats', array (0 => _L('Inactive'), 1 => _L('Pending'), 2 => _L('Active'),));
 switch ($action)
@@ -155,7 +155,7 @@ switch ($action)
          SmartyValidate :: register_validator('v_OWNER_NAME', 'OWNER_NAME', 'notEmpty', true , false, 'trim', 'dir_links_edit');
          SmartyValidate :: register_validator('v_OWNER_EMAIL', 'OWNER_EMAIL', 'isEmail', true , false, 'trim', 'dir_links_edit');
          SmartyValidate :: register_validator('v_EXPIRY_DATE', 'EXPIRY_DATE', 'isDate', true , false, 'trim', 'dir_links_edit');
-		 
+
 		 // Deeplink URL Validation
 	     for($dl=1; $dl<=5; $dl++)
 	     SmartyValidate :: register_validator('v_DEEPLINK_URL' . $dl, 'URL' . $dl, 'isURL' , true, false, 'trim', 'dir_links_edit');
@@ -256,7 +256,7 @@ switch ($action)
 $tpl->assign('content', $content);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
 echo $tpl->fetch('admin/main.tpl');

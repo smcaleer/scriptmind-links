@@ -38,7 +38,7 @@
             <input type="hidden" name="LINK_TYPE" value="reciprocal"/>
 		{elseif count($price) eq 1}
             {* We have 1 link type, need its key *}
-            {foreach from=$price key=link_type item=price}
+            {foreach from=$price key=link_type item=junk}
                 <input type="hidden" name="LINK_TYPE" value="{$link_type}"/>
             {/foreach}
         {else}

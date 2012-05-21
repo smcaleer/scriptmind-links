@@ -106,7 +106,7 @@ $tpl->assign('path', $path);
 $tpl->assign($data);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
 echo $tpl->fetch('add_reciprocal.tpl');

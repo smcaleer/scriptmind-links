@@ -35,7 +35,8 @@ require_once '../include/config.php';
 
 require_once 'include/functions.php';
 require_once 'install/config.php';
-require_once 'libs/intsmarty/intsmarty.class.php';
+if( defined( 'USE_INTSMARTY' ))
+    require_once 'libs/intsmarty/intsmarty.class.php';
 require_once 'libs/smarty/SmartyValidate.class.php';
 require_once 'libs/adodb/adodb.inc.php';
 require_once 'include/version.php';
@@ -61,7 +62,10 @@ if (!is_dir ('../templates') || !is_dir ('../templates/install'))
          <br />
          Please make sure that the folders <strong>templates/</strong> and <strong>templates/install/</strong> are available and readable by the user the webserver runs under.");
 
-$tpl = new IntSmarty($language);
+if( defined('USE_INTSMARTY' ) )
+    $tpl = new IntSmarty($language);
+else
+    $tpl = new mySmarty();
 $tpl->template_dir   = '../templates';
 $tpl->compile_dir    = '../temp/templates';
 $tpl->cache_dir      = '../temp/cache';
@@ -295,7 +299,7 @@ $tpl->assign('VERSION' , CURRENT_VERSION);
 $tpl->assign('step'    , $step);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 echo $tpl->fetch('install/main.tpl');
 

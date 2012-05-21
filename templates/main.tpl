@@ -27,19 +27,8 @@
 	<div id="content"> <!-- for categories/links -->
 	<div class="content">
 		{include file="breadcrumb.tpl"}
-		
-{* ***** Categories ***** *}		
-		{* Calculate the number of categories per row *}
-		{php}
-		   $this->assign('cats_per_col', ceil(count($this->get_template_vars('categs')) / CATS_PER_ROW));
-		{/php}
 
-		{if $cats_per_col > 15}
-		   {php}
-			  $this->assign('cats_per_col', ceil(count($this->get_template_vars('categs')) / (CATS_PER_ROW + 1)));
-		   {/php}
-		{/if}
-
+{* ***** Categories ***** *}
 		{* Categories *}
 		{if !empty($categs)}
 			<div id="categories">
@@ -57,7 +46,7 @@
 						<span class="count">({$cat.COUNT})</span>
 					{/if}
 				{if $category.ID gt 0}</h4>{else}</h3>{/if}
-				
+
 				{* Display subcategories *}
 				{if !empty($cat.SUBCATS)}
 				<ul class="sub-categories">
@@ -92,8 +81,8 @@
 			{l}Links{/l}
 			{if not $p}
 				<span class="small" style="margin-left:50px;">
-					{l}Sort by{/l} : 
-					
+					{l}Sort by{/l} :
+
 					{if $smarty.const.ENABLE_PAGERANK and $smarty.const.SHOW_PAGERANK}
 						{if $sort eq 'P'}
 							<span class="sort">{l}PageRank{/l}</span>
@@ -101,13 +90,13 @@
 							<a href="?s=P{if not $smarty.const.ENABLE_REWRITE}&amp;c={$category.ID}{/if}{if $qu}&amp;q={$qu}{/if}{if !empty($p)}&amp;p={$p}{/if}"> {l}PageRank{/l}</a>
 						{/if}
 					{/if}
-					
+
 					{if $sort eq 'H'}
 						<span class="sort">{l}Hits{/l}</span>
 					{else}
 						<a href="?s=H{if not $smarty.const.ENABLE_REWRITE}&amp;c={$category.ID}{/if}{if $qu}&amp;q={$qu}{/if}{if !empty($p)}&amp;p={$p}{/if}">{l}Hits{/l}</a>
 					{/if}
-					
+
 					{if $sort eq 'A'}
 						<span class="sort">{l}Alphabetical{/l}</span>
 					{else}
@@ -115,16 +104,16 @@
 					{/if}
 				</span>
 			{/if}
-			
+
 			{foreach from=$links item=link name=links}
 				{include file="link.tpl" link=$link}
 			{/foreach}
 		   </div>
 		{/if}
 	</div> <!-- .content -->
-	
+
 	{include file="sidebar.tpl"}
-	
+
 	</div> <!-- #content -->
 </div> <!-- #container -->
 {include file="footer.tpl"}

@@ -39,7 +39,7 @@ if (!$_REQUEST['action'])
    $tpl->assign('content', $content);
 
    //Clean whitespace
-   $tpl->load_filter('output', 'trimwhitespace');
+   $tpl->loadFilter('output', 'trimwhitespace');
 
    //Make output
    echo $tpl->fetch('admin/main.tpl');

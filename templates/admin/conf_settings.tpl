@@ -2,9 +2,7 @@
    {include file="admin/messages.tpl"}
 
 {strip}
-{php}
-   $this->assign('opt_bool', array(1 => $this->translate('Yes'), 0 => $this->translate('No')));
-{/php}
+{assign var=opt_bool value=[1=>"{l}Yes{/l}",0=>"{l}No{/l}"]}
 
 {if $posted}
    <div class="alert">
