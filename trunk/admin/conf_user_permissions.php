@@ -42,7 +42,7 @@ $tpl->assign('ENABLE_REWRITE', ENABLE_REWRITE);
 
 if ($_REQUEST['action'])
 {
-	list ($action, $id) = split (':', $_REQUEST['action']);
+	list ($action, $id) = explode(':', $_REQUEST['action']);
 }
 
 unset ($u);
@@ -182,7 +182,7 @@ $content = $tpl->fetch('admin/conf_user_permissions.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
 echo $tpl->fetch('admin/main.tpl');

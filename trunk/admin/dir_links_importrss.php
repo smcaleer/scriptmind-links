@@ -78,7 +78,7 @@ $content = $tpl->fetch('admin/dir_links_importrss.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
 echo $tpl->fetch('admin/main.tpl');

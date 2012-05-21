@@ -1,7 +1,5 @@
 {strip}
-{php}
-$this->assign('yes_no', array( 1 => $this->translate('Yes'), 0 => $this->translate('No')));
-{/php}
+{assign var=yes_no value=[1=>"{l}Yes{/l}",0=>"{l}No{/l}"]}
 {capture name='field_char_required'}<span class="error">{l}This field is required.{/l}</span>{/capture}
 {capture name='field_pass_required'}<span class="error">{l}This field is required.{/l}</span>{/capture}
 {capture name='field_num_required'}<span class="error">{l}Required numeric field.{/l}</span>{/capture}

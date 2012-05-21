@@ -36,7 +36,7 @@ require_once 'init.php';
 if (empty ($_REQUEST['submit']) && !empty ($_SERVER['HTTP_REFERER']))
    $_SESSION['return'] = $_SERVER['HTTP_REFERER'];
 if ($_REQUEST['action'])
-   list ($action, $id) = split(':', $_REQUEST['action']);
+   list ($action, $id) = explode(':', $_REQUEST['action']);
 
 switch ($action)
 {
@@ -103,7 +103,7 @@ switch ($action)
 $tpl->assign('content', $content);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
 echo $tpl->fetch('admin/main.tpl');

@@ -73,7 +73,7 @@ $content = $tpl->fetch('admin/email_sent_view.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
 echo $tpl->fetch('admin/main.tpl');

@@ -1,14 +1,14 @@
 <?php
 
-require_once("libs/smarty/Smarty.class.php");
+require_once("libs/smarty/SmartyBC.class.php");
 
 /**
  * IntSmarty is an extension on the PHP Smarty templating library
  * found at <A href="http://smarty.php.net/">smarty.php.net</A>. It
  * is designed to allow the easy implementation of localization
- * by harnessing the power of the Smarty templating language for 
- * translations between languages. 
- * 
+ * by harnessing the power of the Smarty templating language for
+ * translations between languages.
+ *
  * This class is (c) John Coggeshall, all rights reserved. It may be
  * used in accordance to the Coggeshall.org license available at:
  *
@@ -25,7 +25,7 @@ require_once("libs/smarty/Smarty.class.php");
  * @since Smarty 2.5.3
  */
 
- class IntSmarty extends Smarty {
+ class IntSmarty extends SmartyBC {
 
     var $default_lang = "en";
     var $lang_path    = "lang/";
@@ -39,17 +39,7 @@ require_once("libs/smarty/Smarty.class.php");
     var $transtable_updated;
 
     /**
-     * PHP 5 compatible wrapper for the constructor
-     *
-     * @param string $lang The language code to set as the active language
-     */
-    function __construct($lang = NULL)
-    {
-        $this->IntSmarty($lang);
-    }
-
-    /**
-     * PHP 5 compatiable destructor 
+     * PHP 5 compatiable destructor
      */
     function __destruct()
     {
@@ -63,11 +53,11 @@ require_once("libs/smarty/Smarty.class.php");
      *
      * @param string $lang The default language to assume when translating or
      *                     omit to auto-detect
-     */  
-    function IntSmarty($lang = NULL) {
+     */
+    function __construct($lang = NULL) {
 
-        parent::Smarty();
-        
+        parent::__construct();
+
         $this->lang_path = INSTALL_PATH.'/lang/';
 
         $this->translation = array();
@@ -77,7 +67,7 @@ require_once("libs/smarty/Smarty.class.php");
         $this->register_function("i18nfile", "smarty_function_i18nfile");
 
         $this->a_languages = array_unique($this->_determineLangs());
-         
+
         if(! is_null($lang)) {
             array_unshift($this->a_languages , $lang);
         }
@@ -87,9 +77,9 @@ require_once("libs/smarty/Smarty.class.php");
         } else {
             $this->cur_language = NULL;
         }
-        
+
         $this->compile_id = $this->cur_language;
-        
+
         foreach( $this->a_languages as $lang) {
             $this->cur_language = $lang;
             if( $this->loadLanguageTable($this->cur_language)) {
@@ -99,8 +89,8 @@ require_once("libs/smarty/Smarty.class.php");
         }
 
     }
-    
-    
+
+
     /**
      * Used to determine if the provided language is one IntSmarty
      * has translation tables for or not.
@@ -116,19 +106,21 @@ require_once("libs/smarty/Smarty.class.php");
      * A overridden method from the Smarty class used to hook into the Smarty
      * engine. See the Smarty documentation for more information
      */
-    function fetch($file, $cache = NULL, $compile_id = "", $display = NULL) {
+    function fetch($template = NULL, $cache_id = NULL, $compile_id = NULL, $parent = NULL, $display = false, $merge_tpl_vars = true, $no_output_filter = false) {
 
-        $cid = $this->cur_language .$compile_id;
-        return parent::fetch($file, $cache, $cid, $display);
+        if( !is_null($compile_id)) {
+            $cid = $this->cur_language .$compile_id;
+        }
+        return parent::fetch($template, $cache_id, $cid, $parent, $display, $merge_tpl_vars, $no_output_filter);
 
     }
-    
+
     /**
-     * A private method used to auto-resolve the accepted language for the 
+     * A private method used to auto-resolve the accepted language for the
      * browser by looking at the $_SERVER['HTTP_ACCEPT_LANGUAGE'] variable.
      * This value can be overridden by passing a language to the constructor
      * as well.
-     * 
+     *
      * @return array An array of the accepted languages, the primary one first.
      */
     function _determineLangs() {
@@ -145,7 +137,7 @@ require_once("libs/smarty/Smarty.class.php");
     /**
      * This method is called to load the language table for a given language. It
      * is designed to be overriden in such a way that the default filesystem storage
-     * can be substituted for a database query, etc. It is responsible for 
+     * can be substituted for a database query, etc. It is responsible for
      * setting the translation table, current language, translation size, etc. for
      * the application.
      *
@@ -181,7 +173,7 @@ require_once("libs/smarty/Smarty.class.php");
     /**
      * This method is used to save the active language table for later use
      * in a translation. It is designed to be overriden by an extending class
-     * to allow saving to a database, etc. 
+     * to allow saving to a database, etc.
      *
      * @return bool A boolean indicating if the table was saved successfully
      */
@@ -253,7 +245,7 @@ require_once("libs/smarty/Smarty.class.php");
      * The _compile_source() method is a private method in the Smarty class (version 2.6.x)
      * which has been overriden to allow us to provide access to the Internationalization tables
      * during the compilation of a new Smarty template. It should never be called directly.
-     * 
+     *
      * Please see the Smarty documentation for more information.
      */
     function _compile_source($resource_name, &$source_content, &$compiled_content, $cache_include_path=null) {
@@ -378,7 +370,9 @@ require_once("libs/smarty/Smarty.class.php");
  */
 function smarty_lang_prefilter($content, &$smarty) {
 
-    $inst = &$smarty->parent_inst;
+    $inst = ( property_exists($smarty, 'parent') && isset( $smarty->parent ) )
+            ? $smarty->parent
+            : $smarty;
 
     $ldq = preg_quote($inst->left_delimiter, '!');
     $rdq = preg_quote($inst->right_delimiter, '!');
@@ -400,7 +394,7 @@ function smarty_lang_prefilter($content, &$smarty) {
             $inst->translation [$hash], $content);
 
         }  else {
-            
+
             $inst->transtable_updated = true;
             $inst->translation[$hash] = $str;
 
@@ -426,9 +420,9 @@ function smarty_lang_prefilter($content, &$smarty) {
  * The {i18nfile} template function itself accepts  two parameters, 'file' (the
  * filename being resolved), and 'lang' (the language to resolve the file to). If
  * the language is not provided, the default current language will be used.
- * 
+ *
  * @param string $params The parameters provided to the i18nfile function
- * @param object $smarty the IntSmarty instance 
+ * @param object $smarty the IntSmarty instance
  * @return string The localized path of the file
  */
 function smarty_function_i18nfile($params, &$smarty) {

@@ -59,11 +59,11 @@ function gotoUnauthorized($reason, $tplFile='unauthorized.tpl', $returnVal=false
    $tpl->assign('unauthorizedReason', $reason);
 
    //Clean whitespace
-   $tpl->load_filter('output', 'trimwhitespace');
+   $tpl->loadFilter('output', 'trimwhitespace');
 
    //Compress output for faster loading
    if (COMPRESS_OUTPUT == 1)
-      $tpl->load_filter('output', 'CompressOutput');
+      $tpl->loadFilter('output', 'CompressOutput');
 
    $output = $tpl->fetch($tplFile);
 
@@ -81,8 +81,39 @@ function gotoUnauthorized($reason, $tplFile='unauthorized.tpl', $returnVal=false
  * Creates a Smarty object and sets default values
  * @author dcb
  */
+require_once( "libs/smarty/SmartyBC.class.php");
+require_once( "libs/smarty/plugins/block.l.php" );
+
+class My_Security_Policy extends Smarty_Security {
+  public $allow_php_tag = true;
+  // allow PHP tags
+  public $php_handling = Smarty::PHP_ALLOW;
+  // allow everthing as modifier
+  public $modifiers = array();
+}
+require_once( 'libs/smarty/SmartyBC.class.php');
+class mySmarty extends SmartyBC {
+
+    public function __construct()
+    {
+        parent::__construct();
+        // enable security
+        //$this->enableSecurity('My_Security_Policy');
+        $this->registerPlugin('block', 'l', 'smarty_block_l');
+        $this->php_handling=Smarty::PHP_ALLOW;
+    }
+    public function translate( $text )
+    {
+        return $text;
+    }
+}
 function get_tpl() {
-	$tpl = new IntSmarty('en');
+    // Temporarily disable intSmarty to allow smarty 3 upgrade
+    if( defined('USE_INTSMARTY' ) )
+        $tpl = new IntSmarty('en');
+    else {
+        $tpl = new mySmarty();
+    }
 	$tpl->template_dir = INSTALL_PATH.'templates';
 	$tpl->compile_dir = INSTALL_PATH.'temp/templates';
 	$tpl->cache_dir = INSTALL_PATH.'temp/cache';

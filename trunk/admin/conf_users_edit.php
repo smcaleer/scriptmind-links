@@ -42,7 +42,7 @@ $tpl->assign('ENABLE_REWRITE', ENABLE_REWRITE);
 
 if ($_REQUEST['action'])
 {
-	list ($action, $id) = split (':', $_REQUEST['action']);
+	list ($action, $id) = explode(':', $_REQUEST['action']);
 }
 
 if ($_SESSION['is_admin'])
@@ -196,7 +196,7 @@ $content = $tpl->fetch('admin/conf_users_edit.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
 echo $tpl->fetch('admin/main.tpl');

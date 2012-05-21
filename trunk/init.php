@@ -46,7 +46,11 @@ if (!defined ('DB_DRIVER'))
    @ exit;
 }
 
-require_once 'libs/intsmarty/intsmarty.class.php';
+if( defined('USE_INTSMARTY' ) )
+    require_once 'libs/intsmarty/intsmarty.class.php';
+else {
+    require_once 'libs/smarty/SmartyBC.class.php';
+}
 require_once 'libs/smarty/SmartyValidate.class.php';
 require_once 'libs/adodb/adodb.inc.php';
 
@@ -74,6 +78,7 @@ else
 
 if (DEBUG === 1)
    set_log('frontend_log.txt');
+
 
 //Initialize template
 $tpl = get_tpl();

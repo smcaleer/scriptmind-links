@@ -1,11 +1,3 @@
-{php}
-   $p = array();
-   for($i = 1; $i <= $this->get_template_vars('difference'); $i++)
-   {
-      $p[] = ($this->get_template_vars('percent_last') + $i) * 5 - 256;
-   }
-   $this->assign('p', $p);
-{/php}
 {strip}
 
 {foreach from=$p item=i}

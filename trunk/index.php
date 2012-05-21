@@ -114,7 +114,7 @@ elseif (isset ($_REQUEST['q']) && !empty ($_REQUEST['q']) && strlen (trim ($_REQ
 else
 {
 	$id = get_category();
-	if (!$tpl->is_cached('main.tpl', $id))
+	if (!$tpl->isCached('main.tpl', $id))
    {
 		$path = get_path($id);
 
@@ -186,12 +186,18 @@ $tpl->assign('path', $path);
 $tpl->assign('links', $links);
 $tpl->assign('categs', $categs);
 
+// Calculate the number of categories per row for template
+$cats_per_col = ceil( count( $categs ) / CATS_PER_ROW );
+if ($cats_per_col > 15)
+    $cats_per_col = ceil( count( $categs ) / (CATS_PER_ROW + 1) );
+$tpl->assign('cats_per_col', $cats_per_col);
+
 /* Top level Categories */
 $topcats = $db->GetAll("SELECT * FROM `{$tables['category']['name']}` WHERE `STATUS` = 2 AND `PARENT_ID` = 0 ORDER BY `TITLE`");
 $tpl->assign('topcats', $topcats);
 
 //Clean whitespace
-$tpl->load_filter('output', 'trimwhitespace');
+$tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
 echo $tpl->fetch('main.tpl', $id);

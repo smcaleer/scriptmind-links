@@ -113,7 +113,7 @@ else
 	$content = $tpl->fetch('admin/dir_validate.tpl');
 	$tpl->assign('content', $content);
 	$page = $tpl->fetch('admin/main.tpl');
-	$page = split('<!--Progressbar-->', $page);
+	$page = explode('<!--Progressbar-->', $page);
 
 	echo $page[0];
 	flush ();
@@ -178,6 +178,12 @@ else
 		$tpl->assign('url', $val['URL']);
 		$tpl->assign('recpr_url', $val['RECPR_URL']);
 		$tpl->assign('row', $i);
+        $p = array();
+        for($step = 1; $step <= $difference; $step++)
+        {
+            $p[] = ($percent_last + $step) * 5 - 256;
+        }
+        $tpl->assign('p', $p);
 		$percent_last = $percent_now;
 		echo $tpl->fetch('admin/dir_validate_prog.tpl');
 		flush();
