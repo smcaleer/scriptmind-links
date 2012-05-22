@@ -1,11 +1,13 @@
 #summary News to be shown on the admin/index.php page of copies.
-
 <wiki:comment>
 IMPORTANT: This page will be shown after login to the admin area of ScriptMind::Links.
 Please keep the content short and relevant.
 
 Order latest first. Trim old entries.
 Leave the start and end shoutouts: STARTNEWS</wiki:comment>
+== Smarty Version Changed ==
+21 May 2012 ScriptMind::Links now uses [http://www.smarty.net/ Smarty] version 3.1.8. This is a breaking change as templates written for Smarty version 2 may no longer function,
+
 == PHP Version Changed ==
 19 May 2012 ScriptMind::Links now uses ADOdb version 517 and as a result requires the PHP version to be at least 5.2
 
