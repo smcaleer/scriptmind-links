@@ -26,6 +26,7 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#                 Portions copyright 2012 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################
@@ -358,7 +359,8 @@ function get_category($uri = NULL) {
 
 	if (ENABLE_REWRITE && !isset ($cid))
    {
-		$path = substr ($path, strlen(DOC_ROOT) + 1);
+        if( substr( $path, 0, strlen(DOC_ROOT) ) == DOC_ROOT )
+            $path = substr ($path, strlen(DOC_ROOT) + 1);
 		$qp = strpos ($path, '?');
 		if ($qp !== false)
       {
@@ -366,10 +368,12 @@ function get_category($uri = NULL) {
 		}
 		$path = explode ('/', $path);
 		$id = 0;
-		foreach ($path as $cat)
-      {
-			if (!empty ($cat))
+		foreach ($path as $cat) {
+			if (!empty ($cat)) {
 				$id = $db->GetOne("SELECT `ID` FROM `{$tables['category']['name']}` WHERE `STATUS` = '2' AND `TITLE_URL` = ".$db->qstr($cat)." AND `PARENT_ID` = ".$db->qstr($id));
+                if( is_null( $id ) )
+                    $id = '0';
+            }
 		}
 	}
 	elseif (preg_match('`[\d]+`', $cid)) {

@@ -26,6 +26,7 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#                 Portions copyright 2012 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################
@@ -38,7 +39,15 @@ require_once 'include/functions.php';
 
 session_start();
 
-define ('DOC_ROOT', substr ($_SERVER["SCRIPT_NAME"], 0, strrpos ($_SERVER["SCRIPT_NAME"], '/')));
+$script_dir = substr ($_SERVER["SCRIPT_NAME"], 0, strrpos ($_SERVER["SCRIPT_NAME"], '/'));
+$script_pos = strpos( $_SERVER['REQUEST_URI'], $script_dir);
+if( $script_pos !== FALSE && $script_pos == 0  ) {
+    define ('DOC_ROOT', $script_dir );
+} else { // our script isn't in the path starting from server document root
+    define ('DOC_ROOT', '');
+}
+unset( $script_dir );
+unset( $script_pos );
 
 if (!defined ('DB_DRIVER'))
 {
