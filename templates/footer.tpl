@@ -16,6 +16,7 @@
 			&copy; {$smarty.now|date_format:"%Y"} {$smarty.const.DIRECTORY_TITLE}
 		</p>
 		<p class="credit">
+            <a href="{$smarty.const.DOC_ROOT}/sitemap.php" title="{l}Full site navigation{/l}">{l}Sitemap{/l}</a>
 			Powered by <a href="http://www.scriptmind.org" title="ScriptMind::Links Script">ScriptMind::Links</a>
 		</p>
 	</div> <!-- #footer -->
