@@ -55,6 +55,7 @@
       <td class="field">
          <input type="text" name="RECPR_URL" value="{$RECPR_URL|trim}" size="40" maxlength="255" class="text" />
          {validate form="add_reciprocal" id="v_RECPR_URL" message=$smarty.capture.invalid_url}
+		{validate form="add_reciprocal" id="v_RECPR_DOMAIN" message=$smarty.capture.recpr_diff_domain}
          {validate form="add_reciprocal" id="v_RECPR_ONLINE" message=$smarty.capture.recpr_not_found|replace:'#SITE_URL#':$smarty.const.SITE_URL}
       </td>
    </tr>

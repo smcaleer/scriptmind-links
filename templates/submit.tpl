@@ -181,6 +181,7 @@
 		<input type="text" name="RECPR_URL" id="RECPR_URL" value="{$RECPR_URL|escape|trim}" size="40" maxlength="255" class="text" />
 		{validate form="submit_link" id="v_RECPR_URL" message=$smarty.capture.invalid_url}
 		{validate form="submit_link" id="v_RECPR_ONLINE" message=$smarty.capture.url_not_online}
+		{validate form="submit_link" id="v_RECPR_DOMAIN" message=$smarty.capture.recpr_diff_domain}
 		{validate form="submit_link" id="v_RECPR_LINK" message=$smarty.capture.recpr_not_found|replace:'#SITE_URL#':$smarty.const.SITE_URL}
 		<br />
 		<label for="RECPR_TEXT">

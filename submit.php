@@ -127,6 +127,7 @@ if (empty ($_REQUEST['submit']))
    SmartyValidate :: register_criteria('isUrlUnique'   , 'validateUrlUnique'  , 'submit_link');
 	SmartyValidate :: register_criteria('isNotEqual'    , 'validate_not_equal' , 'submit_link');
 	SmartyValidate :: register_criteria('isURLOnline'   , 'validate_url_online', 'submit_link');
+   SmartyValidate :: register_criteria('isRecprDomain' , 'validate_recpr_link_dom', 'submit_link');
    SmartyValidate :: register_criteria('isRecprOnline' , 'validate_recpr_link', 'submit_link');
    SmartyValidate :: register_criteria('isCaptchaValid', 'validate_captcha'   , 'submit_link');
 
@@ -142,6 +143,7 @@ if (empty ($_REQUEST['submit']))
    SmartyValidate :: register_validator('v_RECPR_URL'     , 'RECPR_URL'          , 'isURL'         , ($recpr_required ? false : true), false, 'trim', 'submit_link');
    SmartyValidate :: register_validator('v_RECPR_ONLINE'  , 'RECPR_URL'          , 'isURLOnline'   , ($recpr_required ? false : true), false, null, 'submit_link');
    SmartyValidate :: register_validator('v_RECPR_LINK'    , 'RECPR_URL'          , 'isRecprOnline' , ($recpr_required ? false : true), false, null, 'submit_link');
+   SmartyValidate :: register_validator('v_RECPR_DOMAIN'  , 'RECPR_URL'          , 'isRecprDomain' , ($recpr_required ? false : true), false, null, 'submit_link');
 
    SmartyValidate :: register_validator('v_OWNER_NAME' , 'OWNER_NAME'         , 'notEmpty'      , false, false, 'trim', 'submit_link');
    SmartyValidate :: register_validator('v_OWNER_EMAIL', 'OWNER_EMAIL'        , 'isEmail'       , false, false, 'trim', 'submit_link');
@@ -187,11 +189,15 @@ else
 	/*if (VISUAL_CONFIRM == 1 && !empty ($_POST['CAPTCHA']))
       $data = array_merge ($data, array ('CAPTCHA' => $_POST['CAPTCHA']));*/
 
-	$rc_resp = validateReCaptcha();
-	if($rs_resp === true)
-		$tpl->assign('reCaptchaError', 1);
-	else
-		$tpl->assign('reCaptchaError', $rc_resp);
+   if (VISUAL_CONFIRM > 0 ) {
+       $rc_resp = validateReCaptcha();
+       if($rc_resp === true)
+           $tpl->assign('reCaptchaError', 1);
+       else
+           $tpl->assign('reCaptchaError', $rc_resp);
+   } else {
+       $rc_resp = true;
+   }
 
 	if (SmartyValidate :: is_valid($data, 'submit_link') && ($rc_resp === true))
    {

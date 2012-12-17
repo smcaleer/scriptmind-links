@@ -10,7 +10,6 @@
 	<div class="content">
 		{*include file="breadcrumb.tpl"*}
 	{foreach from=$Categories item=cat name=categs}
-        {* for $i = 1 to $cat->depth }&nbsp;&nbsp;&nbsp;{/for *}
         {$indent = str_repeat( '&nbsp;&nbsp;&nbsp;', $cat->depth )}
         {$indent}
         {if $cat->linkable}

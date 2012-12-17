@@ -431,14 +431,34 @@ function validate_recpr_link($value, $empty, &$params, &$form)
 {
    global $tpl;
 
-   if ($empty && empty ($value))
-      return 1;
+    if ($empty && empty ($value))
+        return 1;
 
    $ret = check_recpr_link($form);
-   if (empty ($ret))
+   if (empty ($ret) || $ret == 0 )
       return 0;
 
    return 1;
+}
+
+/**
+ * Check that reciprocal link is from the submitted domain
+ * @author Bruce Clement (http://www.clement.co.nz)
+ * @license GPLv2 or later
+ */
+function validate_recpr_link_dom($value, $empty, &$params, &$form)
+{
+   if (empty ($value))
+      return 1; // Will be checked later
+
+    $Recip = parseDomain( $form['RECPR_URL'] );
+    $Orig  = parseDomain( $form['URL'] );
+    if( strcasecmp( $Orig, $Recip ) ) {
+        return 0;
+
+    }
+
+    return 1;
 }
 
 /**
@@ -454,40 +474,74 @@ function check_recpr_link($data)
 
    $ret = get_url($data['RECPR_URL'], URL_CONTENT);
 
-   if (!isset ($ret['content']) || empty ($ret['content']))
+   $RecipOrig = parseDomain( $ret['url_original'] );
+   $RecipNow  = parseDomain( $ret['url'] );
+   if( strcasecmp( $RecipNow, $RecipOrig ) ) {
+       return -2;
+   }
+
+
+   $site_url = parseDomain(SITE_URL);
+   if (!isset ($ret['content']) || empty ($ret['content'])) {
       return -1;
-   else
-   {
-      //Look for reciprocal in any link tag
-      preg_match_all ("`<(\s*)a([^>]*)".parseDomain(SITE_URL)."([^>]*)>(.*)<\/a>`Ui", $ret['content'], $matches);
+   } else {
+       $dom=new DOMDocument();
+       if( $dom->loadHTML($ret['content']) ) {
+           /*** remove silly white space ***/
+            $dom->preserveWhiteSpace = false;
 
-      //First check if matches array was created
-      if (!is_array ($matches) || empty ($matches))
-         return 0;
+            /*** get the links from the HTML ***/
+            $links = $dom->getElementsByTagName('a');
 
-      //Set internal pointer of array
-      //to its first element
-      reset ($matches);
-
-      //Check if URL exists
-      if (!is_array ($matches[key ($matches)]) || empty ($matches[key ($matches)]))
-         return 0;
-
-      //Check for nofollow
-      foreach ($matches as $m => $match)
-      {
-         foreach ($match as $key => $value)
-         {
-            //If anything nofollow is found validation fails
-            if (preg_match ('`rel[\s]*=[\s]*("|\')?[\s]*nofollow[\s]*("|\')`Ui', $value))
+            /*** loop over the links ***/
+            foreach ($links as $tag)
             {
-               return 0;
+                $href=$tag->getAttribute('href');
+                $test_url = parseDomain($href);
+                if( $test_url == $site_url) {
+                    $rel=$tag->getAttribute( 'rel');
+                    if( empty( $rel ) || false===stripos($rel,'nofollow')) {
+                        return true;
+                    }
+                }
             }
-            unset ($match[$key]);
-         }
-         unset ($matches[$m]);
-      }
-      unset ($matches, $ret);
+            return 0;
+       } else {
+            // malformed page
+            //Look for reciprocal in any link tag
+            $matches=array();
+            preg_match_all ("`<(\s*)a([^>]*)".$site_url."([^>]*)>(.*)<\/a>`Ui", $ret['content'], $matches);
+
+            //First check if matches array was created
+            if (!is_array ($matches) || empty ($matches)) {
+                return 0;
+            }
+
+            //Set internal pointer of array
+            //to its first element
+            reset ($matches);
+
+            //Check if URL exists
+            if (!is_array ($matches[key ($matches)]) || empty ($matches[key ($matches)])) {
+                return 0;
+            }
+
+            //Check for nofollow
+            foreach ($matches as $m => $match)
+            {
+                foreach ($match as $key => $value)
+                {
+                    //If anything nofollow is found validation fails
+                    if (preg_match ('`rel[\s]*=[\s]*("|\')?[\s]*nofollow[\s]*("|\')`Ui', $value))
+                    {
+                    return 0;
+                    }
+                    unset ($match[$key]);
+                }
+                unset ($matches[$m]);
+            }
+            unset ($matches, $ret);
+       }
    }
    return 1;
 }
@@ -496,131 +550,77 @@ define ('URL_RESPONSE', 0);
 define ('URL_HEADERS' , 1);
 define ('URL_CONTENT' , 2);
 
+/**
+ * Fetch a URL, decode the result and return its components
+ * @param string The URL to be parsed
+ * @param int URL_HEADERS: Only fetch headers, URL_CONTENT: fetch headers and content
+ * @param array Cookies to send with the request
+ * @param string the user agent string to use
+ * @return array the result of the fetch
+ * @author Bruce Clement (http://www.clement.co.nz)
+ * @license GPLv2 or later
+ */
 function get_url($url, $what = 0, $referer = "", $cookies = array (), $useragent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322)")
 {
-   static $redirect_count = 0;
-   $ret = array ();
-   $ret['status'] = false;
-   $timeout = 10;
-   $urlArray = parse_url ($url);
-   if (!$urlArray['port'])
-   {
-      if ($urlArray['scheme'] == 'http')
-         $urlArray['port'] = 80;
-      elseif ($urlArray['scheme'] == 'https')
-         $urlArray['port'] = 443;
-      elseif ($urlArray['scheme'] == 'ftp')
-         $urlArray['port'] = 21;
-   }
-   if (!$urlArray['path'])
-      $urlArray['path'] = '/';
-
-   $errno = "";
-   $errstr = "";
-   $fp = @ fsockopen ($urlArray['host'].'.', $urlArray['port'], $errno, $errstr, $timeout);
-   if ($fp)
-   {
-      $request = "GET {$urlArray['path']}";
-      if (!empty ($urlArray['query']))
-         $request .= "?".$urlArray['query'];
-
-      $request .= " HTTP/1.1\r\n"."Host: {$urlArray['host']}\r\n"."User-Agent: {$useragent}\r\n";
-      if (!empty ($referer))
-      {
-         $request .= "Referer: $referer\r\n";
+  $curl = curl_init ( $url );
+  curl_setopt ( $curl, CURLOPT_USERAGENT, $useragent );
+  curl_setopt ( $curl, CURLOPT_FOLLOWLOCATION, true );
+  curl_setopt ( $curl, CURLOPT_MAXREDIRS, 30 );
+  curl_setopt ( $curl, CURLOPT_AUTOREFERER, true );
+  curl_setopt ( $curl, CURLOPT_HEADER, true );
+  if( $what == URL_HEADERS ) {
+    curl_setopt ( $curl, CURLOPT_NOBODY, true );
+  }
+  if( ! empty( $cookies ) ) {
+    $cookiestr='';
+    foreach( $cookies as $key=>$value ) {
+        $cookiestr .= ($cookiestr=='' ? '' : '; ') . $key.'='.$value;
+    }
+    curl_setopt ( $curl, CURLOPT_COOKIE, $cookiestr );
+  }
+  if( $referrer != '' )
+    curl_setopt ( $curl, CURLOPT_REFERER, $referrer );
+  curl_setopt ( $curl, CURLOPT_RETURNTRANSFER, true );
+  $answer = curl_exec( $curl );
+  $headlen = curl_getinfo ( $curl, CURLINFO_HEADER_SIZE );
+  $ret = curl_getinfo ( $curl );
+  $ret['url_original'] = $url;
+  if( $headlen >= strlen( $answer ) ) {
+    $head = $answer;
+    $ret['content'] = '';
+  } else {
+    $head = substr( $answer, 0, $headlen );
+    $ret['content'] = substr( $answer, $headlen );
+  }
+  $headArray=preg_split( '/[\r\n]+/', $head );
+  $resp = array_shift($headArray);
+  $parts = array();
+  if (preg_match ("`HTTP/1\.. (.*) (.*)`U", $resp, $parts))
+  {
+    $ret['status'] = $parts[1][0] == '2' || $parts[1][0] == '3';
+    $ret['code'] = $parts[1];
+  }
+  $head = array();
+  $cookies=array();
+  $value=array();
+  $pattern='/^([^=]*)=([^;]*);(.*)$/';
+  foreach( $headArray as $line ) {
+      if( $line === '' )
+          continue;
+      // Match "Date: Thu, 07 Jun 2012 09:13:58 GMT" -> array( 'Date', 'Thu, ... GMT'
+      preg_match( '/^([^:]*):\s(.*)$/', $line, $value);
+      if( $value[1] == 'Set-Cookie') {
+          preg_match( $pattern, $value[2], $value );
+          $cookies[ $value[1]] = $value[2];
+      } else {
+          $head[ $value[1]] = $value[2];
       }
-      $request .= "Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,video/x-mng,image/png,image/jpeg,image/gif;q=0.2,text/css,*/*;q=0.1\r\n"."Accept-Language: en-us, en;q=0.50\r\n".
-      #"Accept-Encoding: gzip, deflate, compress;q=0.9\r\n".
-      //"Accept-Charset: ISO-8859-1, utf-8;q=0.66, *;q=0.66\r\n".
-      #"Keep-Alive: 300\r\n".
-      "Connection: close\r\n"."Cache-Control: max-age=0\r\n";
-      foreach ($cookies as $k => $v)
-         $request .= "Cookie: {$k}={$v}\r\n";
-
-      $request .= "\r\n";
-      @ fputs ($fp, $request);
-      $ret['response'] = fgets($fp);
-      if (preg_match ("`HTTP/1\.. (.*) (.*)`U", $ret['response'], $parts))
-      {
-         $ret['status'] = $parts[1][0] == '2' || $parts[1][0] == '3';
-         $ret['code'] = $parts[1];
-         if ($what == URL_RESPONSE || !$ret['status'])
-         {
-            @ fclose ($fp);
-            return $ret;
-         }
-         $ret['headers'] = array ();
-         $ret['cookies'] = array ();
-         while (!feof ($fp))
-         {
-            $header = @ fgets ($fp, 2048);
-            if ($header == "\r\n" || $header == "\n" || $header == "\n\l")
-               break;
-            list ($key, $value) = explode(':', $header, 2);
-            if (trim ($key) == 'Set-Cookie')
-            {
-               $value = trim ($value);
-               $p1 = strpos ($value, '=');
-               $p2 = strpos ($value, ';');
-               $key = substr ($value, 0, $p1);
-               $val = substr ($value, $p1 + 1, $p2 - $p1 - 1);
-               $ret['cookies'][$key] = $val;
-            }
-            else
-               $ret['headers'][trim ($key)] = trim ($value);
-         }
-         if (($ret['code'] == '301' || $ret['code'] == '302') && !empty ($ret['headers']['Location']) && $redirect_count < 20)
-         {
-            $redirect_count ++;
-            @ fclose ($fp);
-            if (strpos ($ret['headers']['Location'], 'http://') === 0 || strpos ($ret['headers']['Location'], 'http://'))
-               $redir_url = $ret['headers']['Location'];
-            elseif (strpos ($ret['headers']['Location'], '/') === 0)
-               $redir_url = $urlArray['scheme']."://".$urlArray[host].$ret['headers']['Location'];
-            else
-               $redir_url = $urlArray['scheme']."://".$urlArray[host].$urlArray[path].$ret['headers']['Location'];
-
-            return get_url($redir_url, $what, $url, $ret['cookies']);
-         }
-         $redirect_count = 0;
-         if($what == URL_HEADERS)
-         {
-            @ fclose ($fp);
-            return $ret;
-         }
-         $chunked = isset ($ret['headers']['Transfer-Encoding']) && ('chunked' == $ret['headers']['Transfer-Encoding']);
-         while (!feof ($fp))
-         {
-            $data = '';
-            if ($chunked)
-            {
-               $line = @ fgets ($fp, 128);
-               if (preg_match ('/^([0-9a-f]+)/i', $line, $matches))
-               {
-                  $len = hexdec ($matches[1]);
-                  if (0 == $len)
-                     while (!feof ($fp))
-                        @ fread ($fp, 4096);
-                  else
-                     $data = @ fread ($fp, $len);
-               }
-            }
-            else
-               $data = @ fread ($fp, 4096);
-
-            $ret['content'] .= $data;
-         }
-      }
-      else
-         $errstr = "Bad Communication";
-
-      @ fclose ($fp);
-   }
-   else { // Occurs when if ($fp) returns false
-   }
-   $ret['error'] = $errstr;
-
-   return $ret;
+  }
+  $ret['headers'] = $head;
+  $ret['cookies'] = $cookies;
+  $ret['code'] = curl_getinfo ( $curl, CURLINFO_HTTP_CODE );
+  curl_close( $curl );
+  return $ret;
 }
 
 function parse_news($str)
