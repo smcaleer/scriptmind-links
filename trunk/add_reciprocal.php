@@ -52,9 +52,11 @@ if (empty ($_REQUEST['submit']))
             $_SESSION['cid'] = $data['CATEGORY_ID'];
             SmartyValidate :: connect($tpl);
             SmartyValidate :: register_form('add_reciprocal', true);
+            SmartyValidate :: register_criteria('isRecprDomain' , 'validate_recpr_link_dom', 'add_reciprocal');
             SmartyValidate :: register_criteria('isRecprOnline'  , 'validate_recpr_link', 'add_reciprocal');
             SmartyValidate :: register_validator('v_RECPR_URL'   , 'RECPR_URL', 'isURL'        , !$recpr_required, false, 'trim', "add_reciprocal");
             SmartyValidate :: register_validator('v_RECPR_ONLINE', 'RECPR_URL', 'isRecprOnline', !$recpr_required, false, null, "add_reciprocal");
+            SmartyValidate :: register_validator('v_RECPR_DOMAIN', 'RECPR_URL', 'isRecprDomain', !$recpr_required, false, null, 'add_reciprocal');
          }
          else
             $tpl->assign('link_id_error', 'Reciprocal link is already defined for this link.');

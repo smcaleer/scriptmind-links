@@ -141,7 +141,7 @@ define( 'BASE_URL',  DOC_ROOT . ( (substr( DOC_ROOT,-1) == '/' ) ? '' : '/' ) );
 
 $page_tree = new SitemapObject( 'Pages', BASE_URL, '');
 $page_tree->linkable = false;
-foreach( array( array( 'Submit', 'submit.php', 'a new page' ),
+foreach( array( array( 'Submit', 'submit.php', 'a new link' ),
                 array( 'Latest', 'index.php?p=d', 'links added to the directory' ),
                 array( 'Top Hits', 'index.php?p=d', 'most commonly selected pages' ),
             ) as $pagedata ) {

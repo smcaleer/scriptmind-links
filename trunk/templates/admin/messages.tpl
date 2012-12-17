@@ -20,6 +20,7 @@
 {capture name='invalid_date'}<span class="error">{l}Invalid date format.{/l}</span>{/capture}
 {capture name='field_link_type'}<span class="error">{l}Please select a pricing option.{/l}</span>{/capture}
 {capture name='recpr_not_found'}<span class="error">{l}A link to #SITE_URL# could not be found at the specified URL.{/l}</span>{/capture}
+{capture name='recpr_diff_domain'}<span class="error">{l}Reciprocal links must be on the same domain as the requested link.{/l}</span>{/capture}
 {capture name='email_template_already_defined'}<span class="error">{l}Only 1 template for Email And Add Link can be defined.{/l}</span>{/capture}
 {capture name='invalid_symbolic_category'}<span class="error">{l}Location of symbolic category cannot be parent category.{/l}</span>{/capture}
 {capture name='symbolic_category_exist'}<span class="error">{l}A symbolic category already exists for this category and parent category.{/l}</span>{/capture}
