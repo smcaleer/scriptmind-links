@@ -116,4 +116,22 @@
 
 	</div> <!-- #content -->
 </div> <!-- #container -->
+
+{* Javascript for tracking link clicks *}
+<script type="text/javascript">
+/* <![CDATA[ */
+   var root = '{$smarty.const.DOC_ROOT}';
+   {literal}
+   var a = document.getElementsByTagName("a");
+   for(i = 0; i< a.length; i++)
+      if(a[i].id != '')
+         a[i].onclick = count_link;
+   function count_link() {
+      i = new Image();
+      i.src= root+'/cl.php?id='+this.id;
+      return true;
+   }
+   {/literal}
+/* ]]> */
+</script>
 {include file="footer.tpl"}
