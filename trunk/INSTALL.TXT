@@ -37,7 +37,7 @@
 1. Upload the files in the archive to your host.
 
 2. Change permissions on the following file and four folders to 777 (writing permissions):
-      - include/config.php
+      - config/config.php
       - temp/
       - temp/adodb
       - temp/cache
@@ -59,7 +59,7 @@
 
 5. As a security measure, we recommend you change back permissions
    to 755 on the file:
-      - include/config.php
+      - config/config.php
 
    You can also remove the entire "install" folder.
    If you want to (re)install/update on a later point, you can upload

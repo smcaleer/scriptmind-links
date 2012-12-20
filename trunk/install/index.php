@@ -31,7 +31,7 @@
 # ######################################################################
 */
 
-require_once '../include/config.php';
+require_once '../config/config.php';
 
 require_once 'include/functions.php';
 require_once 'install/config.php';
@@ -408,16 +408,16 @@ function check_requirements() {
    }
    $requirements[] = $result;
 
-   #./include/config.php writable?
-   $result = array ('req' => _L('./include/config.php writable?'));
-   $fn = INSTALL_PATH.'include/config.php';
+   #./config/config.php writable?
+   $result = array ('req' => _L('./config/config.php writable?'));
+   $fn = INSTALL_PATH.'config/config.php';
    if (!is_writable ($fn))
       @ chmod ($fn, 0777);
 
    $result['ok'] = is_writable ($fn);
    if (!$result['ok'])
    {
-      $result['txt']   = _L('Fatal: '.INSTALL_PATH.'include/config.php is not writable, installation cannot continue.');
+      $result['txt']   = _L('Fatal: '.INSTALL_PATH.'config/config.php is not writable, installation cannot continue.');
       $result['fatal'] = true;
    }
    $requirements[] = $result;
@@ -498,7 +498,7 @@ function install_db($db_details) {
       return 0;
    }
 
-   $ret = update_config('include/config.php', array ('LANGUAGE' => $db_details['language'], 'DB_DRIVER' => $db_details['db_driver'], 'DB_HOST' => $db_details['db_host'], 'DB_NAME' => $db_details['db_name'], 'DB_USER' => $db_details['db_user'], 'DB_PASSWORD' => $db_details['db_password']));
+   $ret = update_config('config/config.php', array ('LANGUAGE' => $db_details['language'], 'DB_DRIVER' => $db_details['db_driver'], 'DB_HOST' => $db_details['db_host'], 'DB_NAME' => $db_details['db_name'], 'DB_USER' => $db_details['db_user'], 'DB_PASSWORD' => $db_details['db_password']));
    if ($ret !== true)
    {
       $tpl->assign('form_error', $ret);

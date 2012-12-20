@@ -987,7 +987,7 @@ function install_security_check()
    }
 
    //Check if config file is still writeable
-   $config_file = 'include/config.php';
+   $config_file = 'config/config.php';
    if (is_writable (INSTALL_PATH.$config_file))
       @ chmod ($config_file, 0755);
 

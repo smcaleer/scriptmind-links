@@ -33,7 +33,7 @@
 */
 require_once 'include/client_info.php';
 require_once 'include/version.php';
-require_once 'include/config.php';
+require_once 'config/config.php';
 require_once 'include/tables.php';
 require_once 'include/functions.php';
 

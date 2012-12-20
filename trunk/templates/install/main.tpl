@@ -171,7 +171,7 @@
 <p>{l}To start setting up the directory access the administrative pages {/l}<a href="{$smarty.const.DOC_ROOT}/admin/login.php">{l}here{/l}</a>.</p>
 <p>{l}You can browse the directory {/l}<a href="{$smarty.const.DOC_ROOT}/">{l}here{/l}</a>.</p>
 <h3>{l}YOU MUST DELETE THE FOLLOWING FILE(S) BEFORE CONTINUING:{/l} <em>{$smarty.const.DOC_ROOT}/install/index.php</em></h3>
-<h3>{l}YOU MUST DROP WRITING PERMISSIONS TO FOLLOWING FILE(S) BEFORE CONTINUING:{/l} <em>{$smarty.const.DOC_ROOT}/include/config.php</em></h3>
+<h3>{l}YOU MUST DROP WRITING PERMISSIONS TO FOLLOWING FILE(S) BEFORE CONTINUING:{/l} <em>{$smarty.const.DOC_ROOT}/config/config.php</em></h3>
 {/if}
 
 {if $btn_back}
