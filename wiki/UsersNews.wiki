@@ -5,6 +5,9 @@ Please keep the content short and relevant.
 
 Order latest first. Trim old entries.
 Leave the start and end shoutouts: STARTNEWS</wiki:comment>
+== Installer Changed ==
+21 December 2012 ScriptMind::Links Installer is now protected against re-running and does not need to be deleted from running systems. See Revision r29 
+
 == Smarty Version Changed ==
 21 May 2012 ScriptMind::Links now uses [http://www.smarty.net/ Smarty] version 3.1.8. This is a breaking change as templates written for Smarty version 2 may no longer function,
 
