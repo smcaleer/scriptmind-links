@@ -26,12 +26,43 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#                 Portions copyright 2012 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################
 */
 
-require_once '../config/config.php';
+error_reporting (E_ALL ^ E_WARNING ^ E_NOTICE);
+
+try {
+    error_reporting (E_ALL ^ E_WARNING ^ E_NOTICE);
+    if( ! include_once '../config/config.php' ) {
+        define('CONFIG_EXISTS',FALSE);
+    } else {
+        define('CONFIG_EXISTS',defined('INSTALL_PATH'));
+    }
+} catch (Exception $e) {
+    define('CONFIG_EXISTS',FALSE);
+}
+
+if( ! CONFIG_EXISTS ) {
+    // Configureation file doesn't exist
+    // Need to add in the minimal config
+    //  Add our installation path to the include_path
+    define ('INSTALL_PATH', substr (__file__, 0, -17));
+
+    if(!defined ('PATH_SEPARATOR'))
+        define ('PATH_SEPARATOR', strtoupper (substr (PHP_OS, 0, 3)) == 'WIN' ? ';' : ':');
+
+    ini_set ('include_path', ini_get ('include_path').PATH_SEPARATOR .INSTALL_PATH);
+
+    define('TABLE_PREFIX','PLD_');
+    define('ADODB_ASSOC_CASE', 1);
+    require_once '../include/tables.php';
+    define( 'USE_INTSMARTY', 1 );
+    define('INSTALL_COMPLETE', 'NO' );
+    define('DEMO', false);
+}
 
 require_once 'include/functions.php';
 require_once 'install/config.php';
@@ -54,6 +85,12 @@ session_start();
 
 $step       = (!empty ($_REQUEST['step']) && preg_match ('`^[\d]+$`', $_REQUEST['step']) ? intval ($_REQUEST['step']) : 1);
 $step       = ($step < 1 || $step > 5 ? 1 : $step); //Do not allow more/less steps than default
+
+if( INSTALL_COMPLETE == 'YES' && $step < 5)
+   exit ( "<strong>The site is already installed.</strong>\n
+         <br />
+         If you need to re-install, edit config/config.php and change the define for INSTALL_COMPLETE to 'NO'.");
+
 $language   = (!empty ($_SESSION['language']) ? trim ($_SESSION['language']) : 'en');
 $clear_all  = 0;
 
@@ -160,7 +197,7 @@ switch ($step)
 
       $tpl->assign('btn_next', 1);
       $tpl->assign('btn_back', 1);
-      $tpl->assignLang('title', _L('Database Settings'));
+      $tpl->assign('title', _L('Database Settings'));
 
       if (empty ($_POST['submit']))
       {
@@ -218,7 +255,7 @@ switch ($step)
    case 4 :
       $tpl->assign('btn_next', 1);
       $tpl->assign('btn_back', 1);
-      $tpl->assignLang('title', _L('Administrative User'));
+      $tpl->assign('title', _L('Administrative User'));
 
       if (empty ($_POST['submit']))
       {
@@ -277,9 +314,24 @@ switch ($step)
 
       break;
    case 5 :
-      $p = request_uri();
+      // Install finished.
+      $ret = update_config('config/config.php', array ('INSTALL_COMPLETE' => 'YES' ));
+      if ($ret === true || $ret == "CONFIG_NOT_WRITABLE" ) {
+        // Make config files non-writable, if possible
+        $fn = INSTALL_PATH.'config/config.php';
+        @ chmod ($fn, 0444);
+        $tpl->assign('config_file_writable',is_writable ($fn) ? 1 : 0 );
+
+        $fn = INSTALL_PATH.'config';
+        @ chmod ($fn, 0555);
+        $tpl->assign('config_dir_writable',is_writable ($fn) ? 1 : 0 );
+        $tpl->assign('title', _L('Installation Finished'));
+      } else {
+         $tpl->assign('title', _L('Installation Final Failed'));
+         $tpl->assign('form_error', $ret);
+      }
+
       $tpl->assign('btn_restart', 1);
-      $tpl->assignLang('title', _L('Installation Finished'));
 
       if ($_POST['submit'] == 'restart')
       {
@@ -288,6 +340,7 @@ switch ($step)
       }
 
       $clear_all = 1;
+      break;
 }
 
 $tpl->assign($_POST);
@@ -321,11 +374,11 @@ if ($clear_all == 1)
 function check_requirements() {
    $requirements = array ();
    #PHP Vesion
-   $result        = array ('req' =>_L('PHP Version &gt;= 4.1'));
-   $result['ok']  = @ version_compare (@ phpversion(), '4.1', '>=');
+   $result        = array ('req' =>_L('PHP Version &gt;= 5.2'));
+   $result['ok']  = @ version_compare (@ phpversion(), '5.2', '>=');
    $result['txt'] = '('.@ phpversion().')';
    if (!$result['ok'])
-      $result['txt'] .= _L('phpLinkDirectory may not work. Please upgrade!');
+      $result['txt'] .= _L('ScriptMind::Links may not work. Please upgrade!');
 
    $requirements[] = $result;
 
@@ -354,6 +407,24 @@ function check_requirements() {
    }
    else
       $result['txt'] = _L('Visual confirmation functionality will not be available.');
+
+   $requirements[] = $result;
+
+   #curl support
+   $result       = array ('req' => _L('Curl Support (for checking submitted sites)'));
+   $result['ok'] = extension_loaded ('curl');
+   if ($result['ok'])
+   {
+      ob_start();
+      @ phpinfo(8);
+      $module_info = @ ob_get_contents();
+      @ ob_end_clean();
+      if (preg_match ("/\bcURL\s+Information\b[^\d\n\r]+?([\d\.]+)/i", $module_info, $matches))
+         $result['txt'] = '('.$matches[1].')';
+      unset ($module_info, $matches);
+   }
+   else
+      $result['txt'] = _L('Checking of submitted sites and reciprocal links will not work.');
 
    $requirements[] = $result;
 
@@ -409,16 +480,30 @@ function check_requirements() {
    $requirements[] = $result;
 
    #./config/config.php writable?
-   $result = array ('req' => _L('./config/config.php writable?'));
    $fn = INSTALL_PATH.'config/config.php';
-   if (!is_writable ($fn))
-      @ chmod ($fn, 0777);
+   if(file_exists ($fn) ) {
+        $result = array ('req' => _L('./config/config.php writable?'));
+        if (!is_writable ($fn))
+           @ chmod ($fn, 0777);
 
-   $result['ok'] = is_writable ($fn);
-   if (!$result['ok'])
-   {
-      $result['txt']   = _L('Fatal: '.INSTALL_PATH.'config/config.php is not writable, installation cannot continue.');
-      $result['fatal'] = true;
+        $result['ok'] = is_writable ($fn);
+        if (!$result['ok'])
+        {
+           $result['txt']   = _L('Fatal: '.INSTALL_PATH.'config/config.php is not writable, installation cannot continue.');
+           $result['fatal'] = true;
+        }
+   } else {
+        $result = array ('req' => _L('./config writable?'));
+        $fn = INSTALL_PATH.'config';
+        if (!is_writable ($fn))
+           @chmod($fn, 0777);
+
+        $result['ok'] = is_writable ($fn);
+        if (!$result['ok'])
+        {
+           $result['txt']   = _L('Fatal: '.INSTALL_PATH.'config is not writable, installation cannot continue.');
+           $result['fatal'] = true;
+        }
    }
    $requirements[] = $result;
 
@@ -682,11 +767,16 @@ function create_db($db_type, $db_host, $db_name, $db_user, $db_password)
 
 function update_config($file_name, $values)
 {
-   if (!INSTALL_PATH.file_exists ($file_name))
-      return 'CONFIG_NOT_FOUND';
-   if (!is_writable (INSTALL_PATH.$file_name))
+   $fullFileName=INSTALL_PATH.$file_name;
+   if (!file_exists ($fullFileName)) {
+      copy( INSTALL_PATH.'install/default_config.php', $fullFileName );
+      if (!file_exists ($fullFileName))
+         return 'CONFIG_NOT_FOUND';
+      chmod($fullFileName,0666);
+   }
+   if (!is_writable ($fullFileName))
       return 'CONFIG_NOT_WRITABLE';
-   $file = @ file_get_contents (INSTALL_PATH.$file_name);
+   $file = @ file_get_contents ($fullFileName);
    $vals = '';
    foreach ($values as $key => $val)
       if (!preg_match ("`define\s*\(\s*(?:'|\")$key(?:'|\")\s*,\s*(?:'|\")?.*(?:'|\")?\s*\);`Um", $file))
@@ -694,11 +784,15 @@ function update_config($file_name, $values)
       else
          $file = preg_replace("`define\s*\(\s*(?:'|\")$key(?:'|\")\s*,\s*(?:'|\")?.*(?:'|\")?\s*\);`Um", "define('$key', '$val');", $file);
 
-   $insert_point = strrpos($file, '?>');
-   if ($insert_point !== false)
-      $file = substr ($file, 0, $insert_point).$vals.substr ($file, $insert_point);
+   if( $vals != '' ) {
+        $insert_point = strrpos($file, '?>');
+        if ($insert_point !== false)
+           $file = substr ($file, 0, $insert_point).$vals.substr ($file, $insert_point);
+        else
+            $file=$file."\n".$vals;
+   }
 
-   $f = @ fopen (INSTALL_PATH.$file_name, 'w');
+   $f = @ fopen ($fullFileName, 'w');
    @ fwrite ($f, $file);
    @ fclose ($f);
    return true;

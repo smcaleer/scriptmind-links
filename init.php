@@ -33,11 +33,6 @@
 */
 require_once 'include/client_info.php';
 require_once 'include/version.php';
-require_once 'config/config.php';
-require_once 'include/tables.php';
-require_once 'include/functions.php';
-
-session_start();
 
 $script_dir = substr ($_SERVER["SCRIPT_NAME"], 0, strrpos ($_SERVER["SCRIPT_NAME"], '/'));
 $script_pos = strpos( $_SERVER['REQUEST_URI'], $script_dir);
@@ -46,6 +41,23 @@ if( $script_pos !== FALSE && $script_pos == 0  ) {
 } else { // our script isn't in the path starting from server document root
     define ('DOC_ROOT', '');
 }
+
+error_reporting (E_ALL ^ E_WARNING ^ E_NOTICE);
+try {
+    if( ! include_once 'config/config.php' ) {
+        @ header('Location: '.DOC_ROOT.'/install/index.php');
+        @ exit;
+    }
+} catch (Exception $e) {
+    @ header('Location: '.DOC_ROOT.'/install/index.php');
+    @ exit;
+    throw $e; // Dummy, just in case
+}
+require_once 'include/tables.php';
+require_once 'include/functions.php';
+
+session_start();
+
 unset( $script_dir );
 unset( $script_pos );
 
