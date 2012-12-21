@@ -26,10 +26,11 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#                 Portions copyright 2012 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################
 */
 
-define ('CURRENT_VERSION', '0.1.7');
+define ('CURRENT_VERSION', '0.2.0');
 ?>

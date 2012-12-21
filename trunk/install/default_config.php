@@ -26,6 +26,7 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#                 Portions copyright 2012 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################
@@ -34,6 +35,12 @@
 error_reporting (E_ALL ^ E_WARNING ^ E_NOTICE);
 
 @ header ('Content-Type: text/html; charset=utf-8');
+
+/**
+ * Mark install as complete to prevent rerunning installer on a live site.
+ * If you ever need to override this, change the value back to 'NO'
+ */
+define('INSTALL_COMPLETE', 'NO' );
 
 /**
  * Add our installation path to the include_path

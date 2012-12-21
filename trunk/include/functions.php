@@ -979,7 +979,7 @@ function install_security_check()
 
    //Check if installer is still available
    $installer = 'install/index.php';
-   if (is_file (INSTALL_PATH.$installer))
+   if ( INSTALL_COMPLETE != 'YES' && is_file (INSTALL_PATH.$installer))
    {
       $installer_msg = _L('Installer is still available. This poses a major security risk, please remove ##INSTALLER## file immediately!');
       $warnings[]    = str_replace('##INSTALLER##', '<strong><em>'.trim ($installer).'</em></strong>', $installer_msg);
