@@ -8,7 +8,7 @@ The page *must* contain a string like `0.1.7` or `0.1.8 RC1` (Including the tick
 </wiki:comment>
 = Introduction =
 There is currently no released version of ScriptMind::Links.
-The latest development version is `0.1.7`
+The latest development version is `0.2.0`
 
 
 = Details =
