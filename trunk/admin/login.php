@@ -83,7 +83,7 @@ else
 
             SmartyValidate :: disconnect();
 
-            if (!preg_match ('`(admin|install)/(.*)\.php$`', $_SESSION['return']))
+            if (!preg_match ('`(admin|install)/(.*)\.php(|\?.*)$`', $_SESSION['return']))
                unset ($_SESSION['return']);
 
             if ($_SESSION['return'])
