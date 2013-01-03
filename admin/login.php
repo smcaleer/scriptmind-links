@@ -26,11 +26,12 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#                 Portions copyright 2013 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################
 */
-
+define('FORBID_AUTO_LOGIN', true); // Bad idea to mix auto login with the login screen
 require_once 'init.php';
 
 //Clear the entire cache
@@ -58,29 +59,7 @@ else
    SmartyValidate :: connect($tpl);
    if (SmartyValidate :: is_valid($_POST, 'login'))
    {
-      $sql = "SELECT `ID`, `NAME`, `ADMIN` FROM `{$tables['user']['name']}` WHERE `LOGIN` = ".$db->qstr($_POST['user'])." AND `PASSWORD` = ".$db->qstr(encrypt_password($_POST['pass']));
-
-      $row = $db->GetRow($sql);
-      if (!empty ($row['ID']))
-      {
-         // get permissions for this editor
-         if ($row['ADMIN'] != 1)
-         {
-            $user_permission             = "";
-            $user_grant_permission       = "";
-            $user_permission_array       = array ();
-            $user_grant_permission_array = array ();
-            get_editor_permission($row['ID']);
-            $_SESSION['user_permission']             = $user_permission;
-            $_SESSION['user_grant_permission']       = $user_grant_permission;
-            $_SESSION['user_permission_array']       = $user_permission_array;
-            $_SESSION['user_grant_permission_array'] = $user_grant_permission_array;
-         }
-         if ($row['ADMIN'] || count($user_permission_array) > 0)
-         {
-            $_SESSION['user_id']   = $row['ID'];
-            $_SESSION['is_admin']  = (($row['ADMIN'] == 1) ? 1 : 0);
-
+      if( login($_POST['user'],$_POST['pass']) ) {
             SmartyValidate :: disconnect();
 
             if (!preg_match ('`(admin|install)/(.*)\.php(|\?.*)$`', $_SESSION['return']))
@@ -95,9 +74,6 @@ else
                @ header ("Location: index.php");
 
             exit ();
-         }
-         else
-            $tpl->assign('no_permission', true);
       }
       else
          $tpl->assign('failed', true);

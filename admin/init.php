@@ -5,6 +5,7 @@
 #
 # **********************************************************************
 # Copyright (C) 2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+# Portions Copyright 2013 Bruce Clement (http://www.clement.co.nz/)
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -26,6 +27,7 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#                 Portions copyright 2012-2013 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################
@@ -84,20 +86,26 @@ $featured_where = "(FEATURED = 1 AND (EXPIRY_DATE > ".$db->DBTimeStamp(time())."
 
 if (empty ($_SESSION['user_id']))
 {
-	$f = $_SERVER['SCRIPT_NAME'];
-	if (($p = strrpos ($f, '/')) !== false)
-   {
-		$f = substr ($f, $p + 1);
-	}
-	if ($f != 'login.php')
-   {
-		if (empty ($_SESSION['return']))
-      {
-			$_SESSION['return'] = request_uri();
-		}
-		@ header("Location: login.php");
-		@ exit ();
-	}
+    if( !defined('FORBID_AUTO_LOGIN') && !(empty($_REQUEST['usercode']) && empty($_REQUEST['password']))) {
+        login($_REQUEST['usercode'],$_REQUEST['password'],true);
+    }
+    if (empty ($_SESSION['user_id']))
+    {
+        $f = $_SERVER['SCRIPT_NAME'];
+        if (($p = strrpos ($f, '/')) !== false)
+       {
+            $f = substr ($f, $p + 1);
+        }
+        if ($f != 'login.php')
+       {
+            if (empty ($_SESSION['return']))
+          {
+                $_SESSION['return'] = request_uri();
+            }
+            @ header("Location: login.php");
+            @ exit ();
+        }
+    }
 }
 
 if ($_SESSION['is_admin']) {
