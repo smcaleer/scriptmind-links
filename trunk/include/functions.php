@@ -26,7 +26,7 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
-#                 Portions copyright 2012 Bruce Clement (http://www.clement.co.nz/)
+#                 Portions copyright 2012-2013 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################
@@ -1652,5 +1652,46 @@ function strip_white_space($string='', $replace=' ')
 
    $string = trim ($string);
    return $string;
+}
+
+/**
+ * Login a user. Originally in login.php
+ * @author FrozenMinds.com and Bruce Clement (http://www.clement.co.nz)
+ *
+ * @param string user code
+ * @param string user's password
+ * @return boolean logon succeeded
+ */
+function login($user,$password,$admin_only=false)
+{
+    global $db,$tables;
+    $sql = "SELECT `ID`, `NAME`, `ADMIN` FROM `{$tables['user']['name']}` WHERE `LOGIN` = ".$db->qstr($user)." AND `PASSWORD` = ".$db->qstr(encrypt_password($password));
+
+    $row = $db->GetRow($sql);
+    if (empty ($row['ID']))
+        return false;
+
+    // get permissions for this editor
+    if ($row['ADMIN'] != 1)
+    {
+        if( $admin_only )
+            return false;
+        $user_permission             = "";
+        $user_grant_permission       = "";
+        $user_permission_array       = array ();
+        $user_grant_permission_array = array ();
+        get_editor_permission($row['ID']);
+        $_SESSION['user_permission']             = $user_permission;
+        $_SESSION['user_grant_permission']       = $user_grant_permission;
+        $_SESSION['user_permission_array']       = $user_permission_array;
+        $_SESSION['user_grant_permission_array'] = $user_grant_permission_array;
+    }
+    if ($row['ADMIN'] || count($user_permission_array) > 0)
+    {
+       $_SESSION['user_id']   = $row['ID'];
+       $_SESSION['is_admin']  = (($row['ADMIN'] == 1) ? 1 : 0);
+       return true;
+    }
+    return false;
 }
 ?>
