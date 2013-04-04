@@ -10,11 +10,11 @@
    <meta name="keywords" content="{$metaKeywords}" />
    <meta name="copyright" content="{$metaCopyright}" />
    <meta name="robots" content="INDEX,FOLLOW" />
-   <meta name="generator" content="ScriptMind::Links {$smarty.const.VERSION}" />
-   
+   <meta name="generator" content="ScriptMind::Links {$smarty.const.CURRENT_VERSION}" />
+
    {* CSS Style file *}
    <link rel="stylesheet" type="text/css" href="{$smarty.const.DOC_ROOT}/templates/style.css" />
-   
+
 </head>
 <body>
 <div id="body-container">
