@@ -26,7 +26,7 @@
       <span id="tURL{$id}" class="tt">{$row.$col}</span>
   	{elseif $col eq 'TITLE'}
   		<td><a class="htt" id="T{$id}" href="javascript:void();">{$row.$col}</a>
-  		{include file="admin/link_details.tpl" id=$id link=$link}
+  		{include file="link_details.tpl" id=$id link=$link}
     {elseif $col eq 'RECPR_URL'}
       <td>
       {assign var="s" value=$row.RECPR_VALID}
@@ -37,7 +37,7 @@
       <td>{$row.$col|date_format:$date_format}
     {elseif $col eq 'EXTRA'}
   		<td><a class="htt" id="T{$id}" href="javascript:void();">...</a>
-  		{include file="admin/link_extras.tpl" id=$id link=$link}
+  		{include file="link_extras.tpl" id=$id link=$link}
   	{else}
   		<td>{$row.$col}&nbsp;
   	{/if}
@@ -52,7 +52,7 @@
  </tr>
  {/foreach}
  <tr>
- 	<td colspan="10" class="norec">{include file="admin/list_pager.tpl"}</td>
+ 	<td colspan="10" class="norec">{include file="list_pager.tpl"}</td>
  </tr>
 </table>
 

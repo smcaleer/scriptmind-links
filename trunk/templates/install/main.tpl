@@ -6,7 +6,7 @@
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
    <!-- <link rel="stylesheet" type="text/css" href="install.css" /> -->
    	{* CSS Style file *}
-   <link rel="stylesheet" type="text/css" href="{$smarty.const.DOC_ROOT}/templates/install/style.css" />
+   <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_DIR}/install/style.css" />
 
    <meta name="robots" content="noindex, nofollow" />
    <meta name="generator" content="PHP Link Directory {$VERSION}" />
@@ -52,7 +52,7 @@
    {foreach from=$req item="item"}
    <tr>
       <td>{$item.req}</td>
-      <td> <img src="{$smarty.const.DOC_ROOT}/templates/install/images/{if $item.fatal}close_16.png{assign var="fatal" value=true}{elseif $item.ok}add_16.png{else}close_16.png{/if}" width="16" height="16" alt="" /> </td>
+      <td> <img src="{$smarty.const.TEMPLATE_DIR}/install/images/{if $item.fatal}close_16.png{assign var="fatal" value=true}{elseif $item.ok}add_16.png{else}close_16.png{/if}" width="16" height="16" alt="" /> </td>
       <td><span>&nbsp;{$item.txt}</span></td>
    </tr>
    {/foreach}
@@ -60,7 +60,7 @@
 
 {if $fatal}
 <div class="warning">
-   <img src="{$smarty.const.DOC_ROOT}/templates/install/images/close_16.png" alt="" />
+   <img src="{$smarty.const.TEMPLATE_DIR}/install/images/close_16.png" alt="" />
    {l}At least one fatal error was found. Please correct the reported error(s) and refresh this page or restart the installer in order to continue with the installation process.{/l}
 </div>
 {/if}

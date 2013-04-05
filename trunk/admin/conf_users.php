@@ -66,12 +66,12 @@ else
 	$list = $rs->GetAssoc(true);
 	$tpl->assign('list', $list);
 }
-$content = $tpl->fetch('admin/conf_users.tpl');
+$content = $tpl->fetch('conf_users.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>

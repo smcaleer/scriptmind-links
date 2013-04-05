@@ -7,7 +7,7 @@
 					{$l.label}
 					<!-- #TODO<img class="arrow" src="images/arrow1.gif" width="4" height="7" alt="" /> -->
 				</a>
-			{include file="admin/menu.tpl" m=$l}
+			{include file="menu.tpl" m=$l}
 		{elseif is_array($l)}
 			{if $l.disabled}
 			<a class="disabled">{$l.label}</a>

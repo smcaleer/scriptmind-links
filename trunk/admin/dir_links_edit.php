@@ -250,7 +250,7 @@ switch ($action)
 			}
 		}
 		$tpl->assign($data);
-		$content = $tpl->fetch('admin/dir_links_edit.tpl');
+		$content = $tpl->fetch('dir_links_edit.tpl');
 		break;
 }
 $tpl->assign('content', $content);
@@ -259,5 +259,5 @@ $tpl->assign('content', $content);
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>

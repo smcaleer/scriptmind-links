@@ -52,13 +52,13 @@ if ($_REQUEST['action'])
 }
 else
 {
-   $content = $tpl->fetch('admin/email_export.tpl');
+   $content = $tpl->fetch('email_export.tpl');
    $tpl->assign('content', $content);
 
    //Clean whitespace
    $tpl->loadFilter('output', 'trimwhitespace');
 
    //Make output
-   echo $tpl->fetch('admin/main.tpl');
+   echo $tpl->fetch('main.tpl');
 }
 ?>

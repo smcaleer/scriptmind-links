@@ -26,7 +26,7 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
-#                 Portions copyright 2012 Bruce Clement (http://www.clement.co.nz/)
+#                 Portions copyright 2012-2013 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################

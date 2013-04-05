@@ -84,5 +84,5 @@ else
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/login.tpl');
+echo $tpl->fetch('login.tpl');
 ?>

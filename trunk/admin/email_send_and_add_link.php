@@ -129,7 +129,7 @@ $tpl->assign('IGNORE'      , $_REQUEST['IGNORE']);
 
 $categs = get_categs_tree(0);
 $tpl->assign('categs', $categs);
-$content = $tpl->fetch('admin/email_send_and_add_link.tpl');
+$content = $tpl->fetch('email_send_and_add_link.tpl');
 
 $tpl->assign('content', $content);
 
@@ -137,7 +137,7 @@ $tpl->assign('content', $content);
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 
 function check_email($value, $empty, & $params, & $form) {
    global $db, $tpl, $tables;

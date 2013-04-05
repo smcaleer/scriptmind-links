@@ -13,7 +13,7 @@
    <meta name="generator" content="ScriptMind::Links {$smarty.const.CURRENT_VERSION}" />
 
    {* CSS Style file *}
-   <link rel="stylesheet" type="text/css" href="{$smarty.const.DOC_ROOT}/templates/style.css" />
+   <link rel="stylesheet" type="text/css" href="{$smarty.const.TEMPLATE_DIR}/style.css" />
 
 </head>
 <body>

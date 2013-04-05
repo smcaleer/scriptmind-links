@@ -71,12 +71,12 @@ foreach($list as $category => $category_row){
 	}
 }
 $tpl->assign('list', $list);
-$content = $tpl->fetch('admin/dir_categs.tpl');
+$content = $tpl->fetch('dir_categs.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>

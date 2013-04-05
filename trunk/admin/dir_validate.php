@@ -84,9 +84,9 @@ if (!$start)
 	$categs = get_categs_tree(0);
 	$categs[0] = '[All]';
 	$tpl->assign('categs', $categs);
-	$content = $tpl->fetch('admin/dir_validate.tpl');
+	$content = $tpl->fetch('dir_validate.tpl');
 	$tpl->assign('content', $content);
-	echo $tpl->fetch('admin/main.tpl');
+	echo $tpl->fetch('main.tpl');
 }
 else
 {
@@ -110,9 +110,9 @@ else
 		$columns['RECPR_RESPONSE'] = _L('Recpr. Response');
 	}
 	$tpl->assign('columns', $columns);
-	$content = $tpl->fetch('admin/dir_validate.tpl');
+	$content = $tpl->fetch('dir_validate.tpl');
 	$tpl->assign('content', $content);
-	$page = $tpl->fetch('admin/main.tpl');
+	$page = $tpl->fetch('main.tpl');
 	$page = explode('<!--Progressbar-->', $page);
 
 	echo $page[0];
@@ -185,7 +185,7 @@ else
         }
         $tpl->assign('p', $p);
 		$percent_last = $percent_now;
-		echo $tpl->fetch('admin/dir_validate_prog.tpl');
+		echo $tpl->fetch('dir_validate_prog.tpl');
 		flush();
 		// Progress bar update END
 		$i++;

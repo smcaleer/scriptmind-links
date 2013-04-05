@@ -10,7 +10,7 @@
 				{$mm}
 			{/if}
 		</a>
-		{include file="admin/menu.tpl" m=$mm}
+		{include file="menu.tpl" m=$mm}
 		</li>
 	{/foreach}
 	</ul>

@@ -49,6 +49,36 @@ function read_config($db)
       $rs->MoveNext();
    }
 }
+
+// Called late in the initialisation to set defaults for missing options
+function set_defaults() {
+    if( ! defined('TEMPLATE')) {
+        if( IS_ADMIN ) {
+            define( 'TEMPLATE', 'admin' );
+        } else {
+            define( 'TEMPLATE', '.' );
+        }
+        define('TEMPLATE','templates');
+    }
+    if( ! defined('TEMPLATE_BASE')) {
+        $base=DOC_ROOT;
+        if( IS_ADMIN ) {
+            $base=substr( $base, 0, -6 );
+        }
+        define('TEMPLATE_BASE',$base.'/templates');
+    }
+    if( ! defined('TEMPLATE_DIR')) {
+        if( TEMPLATE == '.' ) {
+            define('TEMPLATE_DIR',TEMPLATE_BASE);
+        } else {
+            define('TEMPLATE_DIR',TEMPLATE_BASE.'/'.TEMPLATE);
+        }
+    }
+    if( ! defined('ADMIN_TEMPLATE_DIR')) {
+        define('ADMIN_TEMPLATE_DIR',TEMPLATE_BASE.'/admin');
+    }
+}
+
 function gotoUnauthorized($reason, $tplFile='unauthorized.tpl', $returnVal=false)
 {
    global $tpl;
@@ -115,7 +145,11 @@ function get_tpl() {
     else {
         $tpl = new mySmarty();
     }
-	$tpl->template_dir = INSTALL_PATH.'templates';
+    if( defined('TEMPLATE') && TEMPLATE != '.') {
+        $tpl->template_dir = INSTALL_PATH.'templates/'.TEMPLATE;
+    } else {
+        $tpl->template_dir = INSTALL_PATH.'templates';
+    }
 	$tpl->compile_dir = INSTALL_PATH.'temp/templates';
 	$tpl->cache_dir = INSTALL_PATH.'temp/cache';
 	return $tpl;

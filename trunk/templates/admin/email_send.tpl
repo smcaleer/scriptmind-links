@@ -27,7 +27,7 @@
 </table>
 {/if}
 <form method="post" action="">
-{include file="admin/messages.tpl"}
+{include file="messages.tpl"}
 {if $send_error}
 <div class="warning">
 <image src="images/no_22.gif"/>

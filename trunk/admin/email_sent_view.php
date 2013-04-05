@@ -57,7 +57,7 @@ if (isset ($_REQUEST['email']))
    $rs = $db->Execute($sql);
    $list = $rs->GetAssoc(true);
    $tpl->assign('list', $list);
-   echo $tpl->fetch('admin/email_sent_rpt_txt.tpl');
+   echo $tpl->fetch('email_sent_rpt_txt.tpl');
    exit();
 }
 
@@ -69,12 +69,12 @@ $rs = $db->SelectLimit("SELECT * FROM `{$tables['email']['name']}` {$where} {$or
 $list = $rs->GetAssoc(true);
 $tpl->assign('list', $list);
 
-$content = $tpl->fetch('admin/email_sent_view.tpl');
+$content = $tpl->fetch('email_sent_view.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>
