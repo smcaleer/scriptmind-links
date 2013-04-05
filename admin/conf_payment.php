@@ -87,12 +87,12 @@ $tpl->assign('payment_um', $payment_um);
 $tpl->assign('link_type_str', $link_type_str);
 $tpl->assign('stats', array (0 => _L('Inactive'), 1 => _L('Pending'), 2 => _L('Active'),));
 
-$content = $tpl->fetch('admin/conf_payment.tpl');
+$content = $tpl->fetch('conf_payment.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>

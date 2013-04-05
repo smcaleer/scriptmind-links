@@ -4,18 +4,18 @@
    <title>ScriptMind::Links v{$smarty.const.CURRENT_VERSION} Admin - Login</title>
    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
    <meta name="robots" content="noindex, nofollow" />
-   
+
    {* CSS Style file *}
-   <link rel="stylesheet" type="text/css" href="{$smarty.const.DOC_ROOT}/../templates/admin/style.css" />
-   <link rel="stylesheet" type="text/css" href="{$smarty.const.DOC_ROOT}/../templates/admin/jqtransform/jqtransform.css" />
+   <link rel="stylesheet" type="text/css" href="{$smarty.const.ADMIN_TEMPLATE_DIR}/style.css" />
+   <link rel="stylesheet" type="text/css" href="{$smarty.const.ADMIN_TEMPLATE_DIR}/jqtransform/jqtransform.css" />
    {* jQuery & JS File *}
    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
-   <script src="{$smarty.const.DOC_ROOT}/../templates/admin/jqtransform/jquery.jqtransform.js" type="text/javascript"></script>
-   <script src="{$smarty.const.DOC_ROOT}/../templates/admin/js/script.js" type="text/javascript"></script>
+   <script src="{$smarty.const.ADMIN_TEMPLATE_DIR}/jqtransform/jquery.jqtransform.js" type="text/javascript"></script>
+   <script src="{$smarty.const.ADMIN_TEMPLATE_DIR}/js/script.js" type="text/javascript"></script>
 </head>
 <body style="vertical-align:middle">
 {* Error and confirmation messages *}
-{include file="admin/messages.tpl"}
+{include file="messages.tpl"}
 <div id="body-container">
 	<div id="header-container">
 		<div id="header">
@@ -57,7 +57,7 @@
 			               <td><input type="submit" name="submit" value="Login" class="btn" /></td>
 			            </tr>
 			         </table>
-			
+
 				</form>
 			</div>
 		</div>

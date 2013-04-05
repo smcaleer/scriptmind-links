@@ -52,12 +52,12 @@ $rs = $db->SelectLimit("SELECT * FROM `{$tables['email_tpl']['name']}` {$orderBy
 $list = $rs->GetAssoc(true);
 $tpl->assign('list', $list);
 $tpl->assign('tpl_types', $email_tpl_types);
-$content = $tpl->fetch('admin/email_message.tpl');
+$content = $tpl->fetch('email_message.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>

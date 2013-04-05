@@ -1,5 +1,5 @@
 {strip}
-{include file="admin/messages.tpl"}
+{include file="messages.tpl"}
 <div class="warning">
 <image src="images/no_22.gif"/>
 <p>{l}Unauthorised.{/l}</p>

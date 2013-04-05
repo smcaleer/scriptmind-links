@@ -33,6 +33,7 @@
 */
 require_once 'include/client_info.php';
 require_once 'include/version.php';
+define ('IS_ADMIN', false);
 
 $script_dir = substr ($_SERVER["SCRIPT_NAME"], 0, strrpos ($_SERVER["SCRIPT_NAME"], '/'));
 $script_pos = strpos( $_SERVER['REQUEST_URI'], $script_dir);
@@ -93,6 +94,7 @@ if($db->Connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME))
 {
    $db->SetFetchMode(ADODB_FETCH_ASSOC);
    read_config($db);
+   set_defaults();
 }
 else
    define('ERROR', 'ERROR_DB_CONNECT');

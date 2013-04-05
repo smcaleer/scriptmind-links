@@ -35,13 +35,13 @@ require_once 'init.php';
 
 if (!$_REQUEST['action'])
 {
-   $content = $tpl->fetch('admin/email_import.tpl');
+   $content = $tpl->fetch('email_import.tpl');
    $tpl->assign('content', $content);
 
    //Clean whitespace
    $tpl->loadFilter('output', 'trimwhitespace');
 
    //Make output
-   echo $tpl->fetch('admin/main.tpl');
+   echo $tpl->fetch('main.tpl');
 }
 ?>

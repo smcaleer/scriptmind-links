@@ -1,5 +1,5 @@
    {* Error and confirmation messages *}
-   {include file="admin/messages.tpl"}
+   {include file="messages.tpl"}
 
 {strip}
 {if $posted}

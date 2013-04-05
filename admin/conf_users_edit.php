@@ -192,12 +192,12 @@ switch ($action)
 
 $tpl->assign($data);
 
-$content = $tpl->fetch('admin/conf_users_edit.tpl');
+$content = $tpl->fetch('conf_users_edit.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>

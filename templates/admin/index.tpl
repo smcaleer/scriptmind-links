@@ -1,5 +1,5 @@
    {* Error and confirmation messages *}
-   {include file="admin/messages.tpl"}
+   {include file="messages.tpl"}
 
 {strip}
 <div class="{if $update_available ne 1}download{else}warning{/if}">{$version|escape|trim}</div>
@@ -40,17 +40,17 @@
 </table>
 
 <OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="960" height="200" id="Column3D" >
-    <param name="movie" value="{$smarty.const.DOC_ROOT}/../templates/admin/swf/FCF_Line.swf" />
+    <param name="movie" value="{$smarty.const.ADMIN_TEMPLATE_DIR}/swf/FCF_Line.swf" />
     <param name="FlashVars" value="&dataURL=charts.php?type=link-submits&chartWidth=960&chartHeight=200">
     <param name="quality" value="high" />
-    <embed src="{$smarty.const.DOC_ROOT}/../templates/admin/swf/FCF_Line.swf" flashVars="&dataURL=charts.php?type=link-submits&chartWidth=960&chartHeight=200" quality="high" width="960" height="200" name="Line" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+    <embed src="{$smarty.const.ADMIN_TEMPLATE_DIR}/swf/FCF_Line.swf" flashVars="&dataURL=charts.php?type=link-submits&chartWidth=960&chartHeight=200" quality="high" width="960" height="200" name="Line" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 </object>
 
 <OBJECT classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase=http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="960" height="200" id="Column3D" >
-    <param name="movie" value="{$smarty.const.DOC_ROOT}/../templates/admin/swf/FCF_Line.swf" />
+    <param name="movie" value="{$smarty.const.ADMIN_TEMPLATE_DIR}/swf/FCF_Line.swf" />
     <param name="FlashVars" value="&dataURL=charts.php?type=link-sales&chartWidth=960&chartHeight=200">
     <param name="quality" value="high" />
-    <embed src="{$smarty.const.DOC_ROOT}/../templates/admin/swf/FCF_Line.swf" flashVars="&dataURL=charts.php?type=link-sales&chartWidth=960&chartHeight=200" quality="high" width="960" height="200" name="Line" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+    <embed src="{$smarty.const.ADMIN_TEMPLATE_DIR}/swf/FCF_Line.swf" flashVars="&dataURL=charts.php?type=link-sales&chartWidth=960&chartHeight=200" quality="high" width="960" height="200" name="Line" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
 </object>
 
 {foreach from=$news item=item}

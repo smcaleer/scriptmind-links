@@ -3,20 +3,20 @@
 <head>
    <title>ScriptMind::Links v{$smarty.const.CURRENT_VERSION} Admin{if !empty($title)} - {$title|escape|trim}{/if}</title>
    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-     
+
    {* CSS Style file *}
-   <link rel="stylesheet" type="text/css" href="{$smarty.const.DOC_ROOT}/../templates/admin/style.css" />
-   <link rel="stylesheet" type="text/css" href="{$smarty.const.DOC_ROOT}/../templates/admin/jqtransform/jqtransform.css" />
+   <link rel="stylesheet" type="text/css" href="{$smarty.const.ADMIN_TEMPLATE_DIR}/style.css" />
+   <link rel="stylesheet" type="text/css" href="{$smarty.const.ADMIN_TEMPLATE_DIR}/jqtransform/jqtransform.css" />
    {* jQuery & JS File *}
    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
-   <script src="{$smarty.const.DOC_ROOT}/../templates/admin/jqtransform/jquery.jqtransform.js" type="text/javascript"></script>
-   <script src="{$smarty.const.DOC_ROOT}/../templates/admin/js/script.js" type="text/javascript"></script>
+   <script src="{$smarty.const.ADMIN_TEMPLATE_DIR}/jqtransform/jquery.jqtransform.js" type="text/javascript"></script>
+   <script src="{$smarty.const.ADMIN_TEMPLATE_DIR}/js/script.js" type="text/javascript"></script>
 </head>
 <body>
 <div id="body-container">
 <div id="navigation">
 	<div class="">
-		{include file="admin/navigation.tpl"}
+		{include file="navigation.tpl"}
 	</div>
 </div>
 <div id="header-container">

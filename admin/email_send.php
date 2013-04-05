@@ -90,7 +90,7 @@ $tpl->assign('tpls', $tpls);
 $tpl->assign($data);
 $tpl->assign('EMAIL_TPL_ID', $_POST['EMAIL_TPL_ID']);
 $tpl->assign('IGNORE', $_POST['IGNORE']);
-$content = $tpl->fetch('admin/email_send.tpl');
+$content = $tpl->fetch('email_send.tpl');
 
 $tpl->assign('content', $content);
 
@@ -98,7 +98,7 @@ $tpl->assign('content', $content);
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 
 function check_email($value, $empty, &$params, &$form) {
    global $db, $tpl, $tables;

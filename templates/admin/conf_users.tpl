@@ -44,7 +44,7 @@
  </tr>
  {/foreach}
  <tr>
- 	<td colspan="{if $ENABLE_REWRITE}10{else}9{/if}" class="norec">{include file="admin/list_pager.tpl"}</td>
+ 	<td colspan="{if $ENABLE_REWRITE}10{else}9{/if}" class="norec">{include file="list_pager.tpl"}</td>
  </tr>
 </table>
 <script type="text/javascript" src="files/table.js"></script>

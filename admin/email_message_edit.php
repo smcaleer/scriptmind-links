@@ -97,7 +97,7 @@ switch ($action)
       }
       $tpl->assign('tpl_types', $email_tpl_types);
       $tpl->assign($data);
-      $content = $tpl->fetch('admin/email_message_edit.tpl');
+      $content = $tpl->fetch('email_message_edit.tpl');
       break;
 }
 $tpl->assign('content', $content);
@@ -106,5 +106,5 @@ $tpl->assign('content', $content);
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>

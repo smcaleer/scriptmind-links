@@ -84,12 +84,12 @@ else
 
 $tpl->assign($data);
 
-$content = $tpl->fetch('admin/conf_profile.tpl');
+$content = $tpl->fetch('conf_profile.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>

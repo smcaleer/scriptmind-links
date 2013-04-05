@@ -35,7 +35,7 @@
   		</div>
   	{elseif $col eq 'TITLE'}
   	<td><a class="htt" id="T{$row.LINK_ID}" href="javascript:void(0);">{$row.$col}</a>
-  		{include file="admin/link_details.tpl" id=$row.LINK_ID link=$link}
+  		{include file="link_details.tpl" id=$row.LINK_ID link=$link}
   	{elseif $col eq 'LINK_TYPE'}
   	<td>{$link_type_str.$val}
   	{elseif $col eq 'P_CONFIRMED'}
@@ -56,7 +56,7 @@
  </tr>
  {/foreach}
  <tr>
- 	<td colspan="13" class="norec">{include file="admin/list_pager.tpl"}</td>
+ 	<td colspan="13" class="norec">{include file="list_pager.tpl"}</td>
  </tr>
 </table>
 <script type="text/javascript" src="files/table.js"></script>

@@ -51,7 +51,7 @@
  </tr>
  {/foreach}
  <tr>
- 	<td colspan="5" class="norec">{include file="admin/list_pager.tpl"}</td>
+ 	<td colspan="5" class="norec">{include file="list_pager.tpl"}</td>
  </tr>
 </table>
 <script type="text/javascript" src="files/table.js"></script>

@@ -74,14 +74,14 @@ else
    }
 }
 
-$content = $tpl->fetch('admin/dir_links_importrss.tpl');
+$content = $tpl->fetch('dir_links_importrss.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 
 // Function to add link data to database
 function add_link($cid,$link, $title = 'N/A', $desc = 'N/A', $status = '2')

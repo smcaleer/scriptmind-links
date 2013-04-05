@@ -42,7 +42,7 @@
  </tr>
  {/foreach}
  <tr>
- 	<td colspan="7" class="norec">{include file="admin/list_pager.tpl"}</td>
+ 	<td colspan="7" class="norec">{include file="list_pager.tpl"}</td>
  </tr>
 </table>
 

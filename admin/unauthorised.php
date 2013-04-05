@@ -33,14 +33,14 @@
 
 require_once 'init.php';
 
-$content = $tpl->fetch('admin/unauthorised.tpl');
+$content = $tpl->fetch('unauthorised.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>
 
 

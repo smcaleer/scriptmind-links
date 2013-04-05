@@ -178,12 +178,12 @@ $tpl->assign('categs', $categs);
 $user_detail = $db->GetRow("SELECT `LOGIN`, `NAME` FROM `{$tables['user']['name']}` WHERE `ID` = ".$db->qstr($u));
 $tpl->assign('user_detail', $user_detail);
 
-$content = $tpl->fetch('admin/conf_user_permissions.tpl');
+$content = $tpl->fetch('conf_user_permissions.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>

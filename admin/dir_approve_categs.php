@@ -52,12 +52,12 @@ $rs = $db->SelectLimit("SELECT C.*, ".$db->IfNull('P.TITLE', "'Top'")." AS `PARE
 $list = $rs->GetAssoc(true);
 $tpl->assign('list', $list);
 
-$content = $tpl->fetch('admin/dir_approve_categs.tpl');
+$content = $tpl->fetch('dir_approve_categs.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>

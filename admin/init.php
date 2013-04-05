@@ -33,6 +33,7 @@
 # ######################################################################
 */
 
+define ('IS_ADMIN', true);
 require_once '../include/version.php';
 require_once '../config/config.php';
 require_once 'include/tables.php';
@@ -57,11 +58,16 @@ if (get_magic_quotes_gpc())
    $_COOKIE  = array_map('stripslashes_deep', $_COOKIE);
 }
 
+define ('DOC_ROOT', substr ($_SERVER["SCRIPT_NAME"], 0, strrpos ($_SERVER["SCRIPT_NAME"], '/')));
+$directory_root = preg_replace ('`[\/]?admin[\/]?$`', '', DOC_ROOT);
+define ('DIRECTORY_ROOT', $directory_root);
+
 $db = ADONewConnection(DB_DRIVER);
 if ($db->Connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME))
 {
    $db->SetFetchMode(ADODB_FETCH_ASSOC);
    read_config($db);
+   set_defaults();
 }
 else
 {
@@ -72,10 +78,6 @@ if (DEBUG===1)
 {
 	set_log('admin_log.txt');
 }
-
-define ('DOC_ROOT', substr ($_SERVER["SCRIPT_NAME"], 0, strrpos ($_SERVER["SCRIPT_NAME"], '/')));
-$directory_root = preg_replace ('`[\/]?admin[\/]?$`', '', DOC_ROOT);
-define ('DIRECTORY_ROOT', $directory_root);
 
 $tpl = get_tpl();
 $tpl->assign('date_format', '%D %H:%M:%S');

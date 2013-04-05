@@ -113,12 +113,12 @@ else
 	$tpl->assign('category', $cid);
 }
 $tpl->assign('rss_link', $rss_link);
-$content = $tpl->fetch('admin/dir_links.tpl');
+$content = $tpl->fetch('dir_links.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>

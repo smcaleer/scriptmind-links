@@ -131,13 +131,13 @@ foreach ($conf as $i => $val)
 $tpl->assign('conf', $conf);
 $tpl->assign('conf_categs', $conf_categs);
 
-$content = $tpl->fetch('admin/conf_settings.tpl');
+$content = $tpl->fetch('conf_settings.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 
 ?>

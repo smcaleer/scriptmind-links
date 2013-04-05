@@ -86,12 +86,12 @@ $tpl->assign('stats', $stats);
 $tpl->assign('version', $version);
 
 
-$content = $tpl->fetch('admin/index.tpl');
+$content = $tpl->fetch('index.tpl');
 $tpl->assign('content', $content);
 
 //Clean whitespace
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('admin/main.tpl');
+echo $tpl->fetch('main.tpl');
 ?>
