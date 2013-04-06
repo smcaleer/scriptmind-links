@@ -6,6 +6,40 @@ preg_match ('#(.*)(_|-)(\d+)\.htm[l]?$#i', request_uri(), $matches);
 
 $id = (!empty ($matches[3]) ? intval ($matches[3]) : 0);
 $linkdetail = $db->GetAll("SELECT * FROM PLD_LINK WHERE ID ='$id'");
+
+// Deep links are currently stored in a 3*5 array in the link record
+// expressed as 15 individual fields.
+// We transform that into a true array before passing to the template
+
+function get_field_or_empty( &$linkdetail, $key ) {
+    if(array_key_exists($key, $linkdetail) ) {
+        $answer = $linkdetail[ $key ];
+        if( ! is_null( $answer ) ) {
+            return $answer;
+        }
+    }
+    return '';
+}
+
+function maybe_add_deeplink( &$deeplinks, $linkdetail, $index ) {
+    $url= get_field_or_empty( $linkdetail, 'URL'.$index );
+    $title=get_field_or_empty( $linkdetail, 'TITLE'.$index );
+    $description=get_field_or_empty( $linkdetail, 'DESCRIPTION'.$index);
+    if( '' != ($url.$title.$description) ) {
+        $deeplinks[] = array(
+            'URL' => $url,
+            'TITLE' => ( $title == '' ) ? $url : $title,
+            'DESCRIPTION' => $description );
+    }
+}
+
+$deeplinks=array();
+maybe_add_deeplink( $deeplinks, $linkdetail[0], '1' );
+maybe_add_deeplink( $deeplinks, $linkdetail[0], '2' );
+maybe_add_deeplink( $deeplinks, $linkdetail[0], '3' );
+maybe_add_deeplink( $deeplinks, $linkdetail[0], '4' );
+maybe_add_deeplink( $deeplinks, $linkdetail[0], '5' );
+$tpl->assign('deeplinks', $deeplinks);
 $tpl->assign('linkdetail', $linkdetail);
 
 $path = array ();

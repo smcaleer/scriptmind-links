@@ -32,11 +32,9 @@
 					<span class="title">Resources</span>
 					<span class="details">
 						<ul>
-						<li><a href="{$thelinkdetail.URL1|escape|trim}">{$thelinkdetail.TITLE1|escape|trim}</a></li>
-						<li><a href="{$thelinkdetail.URL2|escape|trim}">{$thelinkdetail.TITLE2|escape|trim}</a></li>
-						<li><a href="{$thelinkdetail.URL3|escape|trim}">{$thelinkdetail.TITLE3|escape|trim}</a></li>
-						<li><a href="{$thelinkdetail.URL4|escape|trim}">{$thelinkdetail.TITLE4|escape|trim}</a></li>
-						<li><a href="{$thelinkdetail.URL5|escape|trim}">{$thelinkdetail.TITLE5|escape|trim}</a></li>
+                        {foreach from=$deeplinks item=deeplink name=deeplinks}
+                            <li><a href="{$deeplink.URL|escape|trim}"><b>{$deeplink.TITLE|escape|trim}</b></a> {$deeplink.DESCRIPTION|escape|trim}</li>
+                        {/foreach}
 						</ul>
 					</span>
 				</div>
