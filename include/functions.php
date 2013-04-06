@@ -79,7 +79,7 @@ function set_defaults() {
     }
 }
 
-function gotoUnauthorized($reason, $tplFile='unauthorized.tpl', $returnVal=false)
+function gotoUnauthorized($reason, $tplFile, $returnVal=false)
 {
    global $tpl;
 
