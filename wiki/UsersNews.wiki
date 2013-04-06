@@ -5,6 +5,9 @@ Please keep the content short and relevant.
 
 Order latest first. Trim old entries.
 Leave the start and end shoutouts: STARTNEWS</wiki:comment>
+== Smarty Version Changed ==
+06 Apr 2013 Templates have been cleaned-up and the template directory has been restructured so all user templates are in a subdirectory. Choice of template directory is now switchable, although still in code and not through an options screen.
+
 == Installer Changed ==
 21 December 2012 ScriptMind::Links Installer is now protected against re-running and does not need to be deleted from running systems. See Revision r29 
 
@@ -13,9 +16,4 @@ Leave the start and end shoutouts: STARTNEWS</wiki:comment>
 
 == PHP Version Changed ==
 19 May 2012 ScriptMind::Links now uses ADOdb version 517 and as a result requires the PHP version to be at least 5.2
-
-== News and Version Checking ==
-19 May 2012 The news displayed on the Administrator login is now read from the project wiki on Google Code.
-
-The latest released version now also reads from the project wiki.
 <wiki:comment>ENDNEWS</wiki:comment>
