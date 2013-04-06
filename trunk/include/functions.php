@@ -56,7 +56,7 @@ function set_defaults() {
         if( IS_ADMIN ) {
             define( 'TEMPLATE', 'admin' );
         } else {
-            define( 'TEMPLATE', '.' );
+            define( 'TEMPLATE', 'GplLd' );
         }
         define('TEMPLATE','templates');
     }
