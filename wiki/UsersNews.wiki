@@ -5,7 +5,7 @@ Please keep the content short and relevant.
 
 Order latest first. Trim old entries.
 Leave the start and end shoutouts: STARTNEWS</wiki:comment>
-== Smarty Version Changed ==
+== Template clean-up ==
 06 Apr 2013 Templates have been cleaned-up and the template directory has been restructured so all user templates are in a subdirectory. Choice of template directory is now switchable, although still in code and not through an options screen.
 
 == Installer Changed ==
