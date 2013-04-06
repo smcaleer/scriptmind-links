@@ -1,5 +1,5 @@
    {* Error and confirmation messages *}
-   {include file="messages.tpl"}
+   {include file="../messages.tpl"}
 
 {strip}
 {if $sql_error}

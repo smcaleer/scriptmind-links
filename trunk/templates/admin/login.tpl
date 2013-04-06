@@ -15,7 +15,7 @@
 </head>
 <body style="vertical-align:middle">
 {* Error and confirmation messages *}
-{include file="messages.tpl"}
+{include file="../messages.tpl"}
 <div id="body-container">
 	<div id="header-container">
 		<div id="header">

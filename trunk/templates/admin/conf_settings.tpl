@@ -1,5 +1,5 @@
    {* Error and confirmation messages *}
-   {include file="messages.tpl"}
+   {include file="../messages.tpl"}
 
 {strip}
 {assign var=opt_bool value=[1=>"{l}Yes{/l}",0=>"{l}No{/l}"]}

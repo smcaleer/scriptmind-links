@@ -1,5 +1,5 @@
 {strip}
-{include file="messages.tpl"}
+{include file="../messages.tpl"}
 {if $sql_error}
 <div class="warning">
 <image src="images/no_22.gif"/>
