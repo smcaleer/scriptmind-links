@@ -1,5 +1,5 @@
    {* Error and confirmation messages *}
-   {include file="messages.tpl"}
+   {include file="../messages.tpl"}
 
 {strip}
 <div class="{if $update_available ne 1}download{else}warning{/if}">{$version|escape|trim}</div>

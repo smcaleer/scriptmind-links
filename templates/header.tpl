@@ -21,7 +21,7 @@
 	<div id="header-container">
 		<div id="header">
 			{* Error and confirmation messages *}
-			{include file="admin/messages.tpl"}
+			{include file="messages.tpl"}
 
 			<h1 id="site-title">
 				{$in_page_title|escape|trim}
