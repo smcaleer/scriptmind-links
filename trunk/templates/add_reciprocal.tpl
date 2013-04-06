@@ -3,19 +3,19 @@
 {capture assign="description"}{l}Add a valid reciprocal link back to this website{/l}{/capture}
 
 {include file="header.tpl"}
-{include file="top_bar.tpl"}
+{include file="navigation.tpl"}
 
 {strip}
 {if $link_id_error}
    <div class="err">
-      <img src="admin/images/no_22.gif" alt="Error" />
+      <img src="{$smarty.const.TEMPLATE_DIR}/images/no_22.gif" alt="Error" />
       <p>{l}Invalid Link referenced.{/l}</p>
       <p>{$link_id_error}</p>
    </div>
 {/if}
 {if $sql_error}
    <div class="err">
-      <img src="admin/images/no_22.gif" alt="Error" />
+      <img src="{$smarty.const.TEMPLATE_DIR}/images/no_22.gif" alt="Error" />
       <p>{l}An error occured while saving.{/l}</p>
       <p>{l}The database server returned the following message:{/l}</p>
       <p>{$sql_error}</p>

@@ -2,7 +2,7 @@
 {capture assign="in_page_title"}{l}Unauthorized{/l}{/capture}
 {capture assign="description"}{l}No authorization{/l}{/capture}
 {include file="header.tpl"}
-{include file="top_bar.tpl"}
+{include file="navigation.tpl"}
 
 {strip}
 <table border="0" class="formPage" align="center" style="clear:both; margin-top:3em;">

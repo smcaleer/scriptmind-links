@@ -33,7 +33,7 @@
 
 //Make additional spam protection checks
 
-function check_post_rules($ressource='', $tplpath='', $returnVal=false)
+function check_post_rules($ressource='', $returnVal=false)
 {
    global $tpl;
 
@@ -57,11 +57,11 @@ function check_post_rules($ressource='', $tplpath='', $returnVal=false)
 
             if ($returnVal)
             {
-               return gotoUnauthorized($reason, $tplpath.'unauthorized.tpl', true);
+               return gotoUnauthorized($reason, TEMPLATE_DIR.'/unauthorized.tpl', true);
             }
             else
             {
-               gotoUnauthorized($reason, $tplpath.'unauthorized.tpl', false);
+               gotoUnauthorized($reason, TEMPLATE_DIR.'/unauthorized.tpl', false);
                exit();
             }
          }
@@ -106,11 +106,11 @@ function check_post_rules($ressource='', $tplpath='', $returnVal=false)
 
             if ($returnVal)
             {
-               return gotoUnauthorized($reason, $tplpath.'unauthorized.tpl', true);
+               return gotoUnauthorized($reason, TEMPLATE_DIR.'/unauthorized.tpl', true);
             }
             else
             {
-               gotoUnauthorized($reason, $tplpath.'unauthorized.tpl', false);
+               gotoUnauthorized($reason, TEMPLATE_DIR.'/unauthorized.tpl', false);
                exit();
             }
          }
@@ -119,7 +119,7 @@ function check_post_rules($ressource='', $tplpath='', $returnVal=false)
       }
    }
 
-   unset ($ressource, $tplpath, $returnVal);
+   unset ($ressource,  $returnVal);
    return false;
 }
 ?>
