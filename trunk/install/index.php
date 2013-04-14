@@ -65,6 +65,7 @@ if( ! CONFIG_EXISTS ) {
 }
 
 require_once 'include/functions.php';
+require_once 'libs/plugins/plugins.inc';
 require_once 'install/config.php';
 if( defined( 'USE_INTSMARTY' ))
     require_once 'libs/intsmarty/intsmarty.class.php';

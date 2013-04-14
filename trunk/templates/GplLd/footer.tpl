@@ -23,5 +23,11 @@
 </div> <!-- #footer-container -->
 
 </div> <!-- #body-container -->
+{assign var=values value=Plugin::fetchValues("LatePageFooter")}
+<ol>
+{foreach from=$values item=value name=values}
+    <li>{$value}</li>
+{/foreach}
+</ol>
 </body>
 </html>

@@ -38,9 +38,9 @@ require_once '../include/version.php';
 require_once '../config/config.php';
 require_once 'include/tables.php';
 require_once 'include/functions.php';
+require_once 'libs/plugins/plugins.inc';
 if( defined('USE_INTSMARTY' ) )
     require_once 'libs/intsmarty/intsmarty.class.php';
-require_once 'include/functions.php';
 require_once 'libs/smarty/SmartyValidate.class.php';
 require_once 'libs/adodb/adodb.inc.php';
 
@@ -68,6 +68,10 @@ if ($db->Connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME))
    $db->SetFetchMode(ADODB_FETCH_ASSOC);
    read_config($db);
    set_defaults();
+    /** @var ModuleAnchor */
+    $anchor = makePluginAnchor();
+    $where = 'ACTIVE=1 AND ADMIN_HOOKS=1';
+    Plugin::load($anchor, $where, true);
 }
 else
 {
@@ -145,6 +149,7 @@ if ($_SESSION['is_admin']) {
 						array('label' => _L('Featured Links'), 'url' => 'conf_settings.php?c=7'),
 						array('label' => _L('Payment'), 'url' => 'conf_settings.php?c=9'),
 						array('label' => _L('reCaptcha'), 'url' => 'conf_settings.php?c=10'),
+						array('label' => _L('Plugins'), 'url' => 'plugins.php'),
 						//array('label' => _L('Paypal Integration'), 'url' => 'conf_settings.php?c=8'),
 						'message' => array('label' => _L('Edit Email Templates'), 'url' => 'email_message.php'),
 						'payment' => array('label' => _L('Payments'), 'url' => 'conf_payment.php', 'disabled' => PAY_ENABLE!=='1'),

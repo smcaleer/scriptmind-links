@@ -1728,4 +1728,16 @@ function login($user,$password,$admin_only=false)
     }
     return false;
 }
-?>
+
+/**
+ * Make an anchor class for plugins
+ * @global type $db
+ * @return \PluginAnchor
+ */
+function makePluginAnchor() {
+    global $db;
+    $anchor = new PluginAnchor();
+    $anchor->tablePrefix = TABLE_PREFIX;
+    $anchor->db = $db;
+    return $anchor;
+}
