@@ -56,6 +56,7 @@ try {
 }
 require_once 'include/tables.php';
 require_once 'include/functions.php';
+require_once 'libs/plugins/plugins.inc';
 
 session_start();
 
@@ -95,9 +96,25 @@ if($db->Connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME))
    $db->SetFetchMode(ADODB_FETCH_ASSOC);
    read_config($db);
    set_defaults();
+    /** @var ModuleAnchor */
+    $anchor = makePluginAnchor();
+    $where = 'ACTIVE=1 AND NORMAL_HOOKS=1';
+    $plugins = Plugin::load($anchor, $where, true);
+    if( empty($plugins)) {
+        /** @var Plugin */
+        $piwik = Plugin::create('Piwik', $anchor);
+        $piwik->Active = true;
+        $piwik->Server = 'piwik.888wizard.net';
+        $piwik->SiteId = 1;
+        $piwik->register_callbacks( );
+        $piwik->save();
+        unset( $piwik);
+    }
+    unset( $plugins );
 }
 else
    define('ERROR', 'ERROR_DB_CONNECT');
+
 
 if (DEBUG === 1)
    set_log('frontend_log.txt');

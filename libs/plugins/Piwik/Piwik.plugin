@@ -1,0 +1,145 @@
+<?php
+/**
+# ######################################################################
+# Project:     ScriptMind::Plugins: Version 0.0.1
+# **********************************************************************
+# Copyright (C) 2013 Bruce Clement. (http://www.clement.co.nz/)
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public License (LGPL)
+# as published by the Free Software Foundation; either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received copies of the GNU General Public License and the
+# GNU Lesser General Public License along with this program; if not, write to
+# the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
+#
+# Please note that the terms of the LGPL version 3 permit relicencing under
+# the terms of GNU General Public License (GPL) version 3.
+# It is both anticipated and encouraged that people using this plugin as
+# source for their own plugins may choose to relicence it under the GPL.
+# **********************************************************************
+#
+# For questions, help, comments, discussion, etc., please join the
+# ScriptMind::Links Forum
+#
+# @link           http://www.scriptmind.org/
+# @copyright      2013 Bruce Clement. (http://www.clement.co.nz/)
+# @license http://URL LGPLv3 or later
+# @projectManager Bruce Clement
+# @package        ScriptMind::Plugins
+# ######################################################################
+*/
+
+/**
+ * Description of piwik
+ *
+ * @author Bruce Clement
+ */
+class Piwik extends Plugin {
+    public $Server;
+    public $SiteId;
+    public $LogAdmin;
+    /**
+     * Provides a description of the module for the admin plugins page
+     */
+    public function describe( ) {
+        return <<<EOD
+<a href="http://piwik.org/">Piwik</a> is an open source web analytics tool.
+The piwik plugin allows tracking code to be added to your site's pages.<br/><br/>
+To use this plugin you will need to first set-up a piwik server.
+EOD;
+    }
+    /**
+     * Get a list of options this module provides
+     * Child classes should add their options to this array
+     * @return array One line per option, each line is an array:
+     *         'Name': option name,
+     *         'Value': current value
+     *         'Type': Bool, Integer, Url, Text, or Enumeration array
+     *         'Description': Text
+     */
+    public function enumerate_options() {
+        return array_merge( parent::enumerate_options(),
+                            array( array( 'Server', 'Server', $this->Server, 'URL', "Address of the Piwik server. Leave http:// off to auto-switch between https and http."),
+                                   array( 'SiteId', 'Site Id', $this->SiteId, 'Integer', "ID assigned by the server"),
+                                   array( 'LogAdmin', 'Log Admins', (int)$this->LogAdmin, 'Bool', "Do we want to track administrators when they are logged in?")
+                            )
+                );
+    }
+
+    public function __construct( $anchor ) {
+        parent::__construct( $anchor );
+        $this->Server='';
+        $this->SiteId=1;
+        $this->LogAdmin = false;
+    }
+    /**
+     * Set an option
+     * Child classes should update their options from recognised options
+     * and pass anything they don't understand to their parent classes
+     */
+    public function set_option( $name, $value ) {
+        switch( $name ) {
+            case 'Server' : $this->Server = $value;     break;
+            case 'SiteId' : $this->SiteId = $value;     break;
+            case 'LogAdmin' : $this->LogAdmin = $value;     break;
+            default : parent::set_option( $name, $value );
+        }
+    }
+    public function after_save( $state_before, $state_now ) {}
+    /**
+     * Called after loading from database to complete the
+     * initialisation of the object
+     */
+    public function after_load( $id, $anchor ) {
+        parent::after_load($id, $anchor);
+    }
+    /**
+     * Called after loading plugins from the database to insert their callbacks
+     * into the control structures used to implement fetchValues
+     */
+    public function register_callbacks() {
+        $this->provides( 'LatePageFooter', array( $this, 'LatePageFooter')); // Will not add if plugin not active
+        parent::register_callbacks();
+    }
+
+    /**
+     * Called to perform any required processing
+     * by template engine.
+     * The overridden register_callbacks should have registered us to perform
+     * these task
+     */
+    public function LatePageFooter( ) {
+        $url = $this->Server;
+        if( substr( $url, -1) != '/') $url .= '/';
+        if(substr($url, 0, 4 ) == 'http' ) {
+            $url = '"'.$url.'"';
+        } else {
+            $url = '(("https:" == document.location.protocol) ? "https" : "http") + "://'.$url.'"';
+        }
+                return <<<JSCRIPT
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  _paq.push(["trackPageView"]);
+  _paq.push(["enableLinkTracking"]);
+
+  (function() {
+    var u=$url;
+    _paq.push(["setTrackerUrl", u+"piwik.php"]);
+    _paq.push(["setSiteId", "$this->SiteId"]);
+    var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Piwik Code -->
+JSCRIPT;
+    }
+}

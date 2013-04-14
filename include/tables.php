@@ -26,6 +26,7 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#                 Portions copyright 2013 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################
@@ -264,4 +265,19 @@ $tables = array();
    )
  );
 
-?>
+ $tables['plugin'] = array (
+   'name'   => TABLE_PREFIX.'PLUGIN'              ,
+   'fields' => array (
+      'ID'               => 'I KEY AUTO'            ,
+      'CLASS_NAME'       => 'C(255) NOTNULL'        ,
+      'ACTIVE'           => 'I NOTNULL DEFAULT 1'   ,
+      'ADMIN_HOOKS'      => 'I NOTNULL DEFAULT 1'   ,
+      'NORMAL_HOOKS'     => 'I NOTNULL DEFAULT 1'   ,
+      'CLASS_DATA'       => 'B NULL'
+   ),
+   'indexes' => array (
+      'CLASS_NAME'       => 'CLASS_NAME'                         ,
+      'NORMAL_HOOKS'     => array ('ACTIVE',  'NORMAL_HOOKS'    , 'CLASS_NAME') ,
+      'ADMIN_HOOKS'      => array ('ACTIVE',  'ADMIN_HOOKS'     , 'CLASS_NAME')
+   )
+ );
