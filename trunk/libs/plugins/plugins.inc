@@ -45,6 +45,24 @@ class PluginAnchor {
 }
 
 /**
+ * Parameters passed to filters and returned to the calling process.
+ * Filters validate or transform supplied parameters
+ */
+class PluginFilterParameters {
+    /** @var array calling routines arguments, possibly altered by previous filters */
+    public $callersArgs;
+    /** @var bool A filter has changed a supplied parameter. Useful as a hint to the caller */
+    public $changedArg = false;
+    /** @var bool An error has occurred. */
+    public $error = false;
+    /** @var string the text of found error(s) */
+    public $errorMessage = "";
+    /** @var bool Stop running other filters. May be set by a
+     * filter encountering an error or providing a definitive answer */
+    public $stop = false;
+}
+
+/**
  # Base class of plugins
  # provides skeletons for methods that derived classes will override
  #
@@ -54,6 +72,11 @@ abstract class Plugin {
      * Loaded plugins that are registered to provide tasks
      */
     public static $providers=array();
+
+    /**
+     * Loaded plugins that are registered to provide filters
+     */
+    public static $filters=array();
 
     /**
      * Where plugins live. Defaults to our directory.
@@ -136,6 +159,9 @@ abstract class Plugin {
      * provides( array( array( serviceName, callable ), ... ) )
      *
      * **** USUALLY DOES NOT NEED OVERRIDING ****
+     *
+     * @param string $service The name of the provided service
+     * @param callable $callback The routine to be called
      */
     public function provides( $service, $callback = null ) {
         if( $this->Active) {
@@ -153,6 +179,37 @@ abstract class Plugin {
                     self::$providers[ $service ][] = $callback;
                 } else {
                     self::$providers[ $service ] = array( $callback );
+                }
+            }
+        }
+    }
+    /**
+     * Register this plugin as providing a service
+     *
+     * Call with either provides( serviceName, callable ) or
+     * provides( array( array( serviceName, callable ), ... ) )
+     *
+     * **** USUALLY DOES NOT NEED OVERRIDING ****
+     *
+     * @param string $service The name of the provided service
+     * @param callable $callback The routine to be called
+     */
+    public function RegisterFilter( $service, $callback = null ) {
+        if( $this->Active) {
+            if( is_null( $callback ) ) {
+                foreach( $service as $task ) {
+                    $taskname = $task[0];
+                    if(array_key_exists($taskname, self::$filters)) {
+                        self::$filters[ $taskname ][] = $task[1];
+                    } else {
+                        self::$filters[ $taskname ] = array( $task[1] );
+                    }
+                }
+            } else {
+                if(array_key_exists($service, self::$filters)) {
+                    self::$filters[ $service ][] = $callback;
+                } else {
+                    self::$filters[ $service ] = array( $callback );
                 }
             }
         }
@@ -185,6 +242,24 @@ abstract class Plugin {
             }
         }
         return $answer;
+    }
+
+    /*
+     * Static function to call all registered providers of a named filter
+     * @return array(string) Result
+     */
+    public static function runFilters( $taskName ) {
+        $args = new PluginFilterParameters();
+        $args->callersArgs = func_get_args();
+        if(array_key_exists($taskName, self::$filters)) {
+            // NB $args->callersArgs[0] == $taskName. I left this
+            // in place to allow one callback to handle multiple tasks.
+            foreach( self::$filters[ $taskName ] as $filter ) {
+                call_user_func($filter, $args);
+                if( $args->stop) break;
+            }
+        }
+        return $args;
     }
     /**
     * Create the serialised data
