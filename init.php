@@ -98,19 +98,7 @@ if($db->Connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME))
    set_defaults();
     /** @var ModuleAnchor */
     $anchor = makePluginAnchor();
-    $where = 'ACTIVE=1 AND NORMAL_HOOKS=1';
-    $plugins = Plugin::load($anchor, $where, true);
-    if( empty($plugins)) {
-        /** @var Plugin */
-        $piwik = Plugin::create('Piwik', $anchor);
-        $piwik->Active = true;
-        $piwik->Server = 'piwik.888wizard.net';
-        $piwik->SiteId = 1;
-        $piwik->register_callbacks( );
-        $piwik->save();
-        unset( $piwik);
-    }
-    unset( $plugins );
+    Plugin::load($anchor, 'ACTIVE=1 AND NORMAL_HOOKS=1', true);
 }
 else
    define('ERROR', 'ERROR_DB_CONNECT');

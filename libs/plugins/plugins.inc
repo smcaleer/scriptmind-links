@@ -314,13 +314,16 @@ abstract class Plugin {
         $this->after_save($state_before, $state_after);
         return $this->Object;
     }
+    static public function autoload( $classname ) {
+        (@include self::$pluginDir."/$classname.plugin") ||
+        (include self::$pluginDir."/$classname/$classname.plugin");
+    }
     /**
      * Static method to reconstitute the class
      * @return Plugin
      */
     static public function unserialise( $classname, $data, $id, $anchor) {
-        require_once self::$pluginDir."/$classname/$classname.plugin";
-        /** @var Plugin the reconstituted plugin */
+        /** @var $object Plugin the reconstituted plugin */
         $object = unserialize(gzuncompress($data));
         $object->after_load( $id, $anchor );
         return $object;
@@ -330,7 +333,6 @@ abstract class Plugin {
      * @return Plugin
      */
     static public function create( $pluginName, $anchor = NULL) {
-        require_once self::$pluginDir."/$pluginName/$pluginName.plugin";
         /** @var Plugin the new Plugin */
         $object = new $pluginName( $anchor );
         return $object;
@@ -459,3 +461,5 @@ abstract class Plugin {
         $this->Active = false;
     }
 }
+
+spl_autoload_register('Plugin::autoload');
