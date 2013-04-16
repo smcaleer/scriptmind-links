@@ -485,7 +485,7 @@ function validate_recpr_link_dom($value, $empty, &$params, &$form)
    if (empty ($value))
       return 1; // Will be checked later
 
-    $Recip = parseDomain( $form['RECPR_URL'] );
+    $Recip = parseDomain( $value );
     $Orig  = parseDomain( $form['URL'] );
     if( strcasecmp( $Orig, $Recip ) ) {
         return 0;
@@ -1583,7 +1583,7 @@ function parseDomain($url)
    if (empty ($url))
       return false;
 
-   $output = parseURL($url);
+   $output = parse_url($url);
 
    if (!isset ($output['host']))
       return false;
