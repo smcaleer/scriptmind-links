@@ -76,12 +76,14 @@
 		<input type="text" id="title" name="TITLE" value="{$TITLE|escape|trim}" size="40" maxlength="255" class="text" />
 		{validate form="submit_link" id="v_TITLE" message=$smarty.capture.field_char_required}
 		{validate form="submit_link" id="v_TITLE_U" message=$smarty.capture.title_not_unique}
+        {validate form="submit_link" field="TITLE" criteria='ValidateWithPlugins' message=$smarty.capture.plugin_error}
 
 		<label for="URL">
 			<span class='req'>*</span>{l}URL{/l}:
 		</label>
 
 		<input type="text" id="URL" name="URL" value="{$URL|escape|trim}" size="40" maxlength="255" class="text"/>
+        {validate form="submit_link" field="URL" criteria='ValidateWithPlugins' message=$smarty.capture.plugin_error}
 		{validate form="submit_link" id="v_URL" message=$smarty.capture.invalid_url}
 		{validate form="submit_link" id="v_URL_ONLINE" message=$smarty.capture.url_not_online}
 		{validate form="submit_link" id="v_URL_U" message=$smarty.capture.url_not_unique}
@@ -98,6 +100,7 @@
 				{l}URL 1{/l}:
 			</label>
 			<input type="text" id="URL1" name="URL1" value="{$URL1|escape|trim}" size="40" maxlength="255" class="text"/>
+            {validate form="submit_link" field="URL1" criteria='ValidateWithPlugins' message=$smarty.capture.plugin_error}
 			{validate form="submit_link" id="v_DEEPLINK_URL1" message=$smarty.capture.invalid_url}
 
 

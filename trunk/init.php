@@ -109,6 +109,7 @@ if (DEBUG === 1)
 
 
 //Initialize template
+/* @var $tpl SmartyBC */
 $tpl = get_tpl();
 $tpl->cache_lifetime = 0;
 

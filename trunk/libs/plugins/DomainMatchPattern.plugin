@@ -1,0 +1,156 @@
+<?php
+/**
+# ######################################################################
+# Project:     ScriptMind::Plugins: Version 0.0.1
+# **********************************************************************
+# Copyright (C) 2013 Bruce Clement. (http://www.clement.co.nz/)
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public License (LGPL)
+# as published by the Free Software Foundation; either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received copies of the GNU General Public License and the
+# GNU Lesser General Public License along with this program; if not, write to
+# the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
+#
+# Please note that the terms of the LGPL version 3 permit relicencing under
+# the terms of GNU General Public License (GPL) version 3.
+# It is both anticipated and encouraged that people using this plugin as
+# source for their own plugins may choose to relicence it under the GPL.
+# **********************************************************************
+#
+# For questions, help, comments, discussion, etc., please join the
+# ScriptMind::Links Forum
+#
+# @link           http://www.scriptmind.org/
+# @copyright      2013 Bruce Clement. (http://www.clement.co.nz/)
+# @license http://URL LGPLv3 or later
+# @projectManager Bruce Clement
+# @package        ScriptMind::Plugins
+# ######################################################################
+*/
+
+/**
+ * Generic place fixed text in places
+ *
+ * @author Bruce Clement
+ */
+class DomainMatchPattern extends Plugin {
+    public $Expression;
+    public $Rule;
+    public $Test;
+    public $ErrorMessage;
+    /**
+     * Provides a description of the module for the admin plugins page
+     */
+    public function describe( ) {
+        return <<<EOD
+Require or forbid a domain name to match a regular expression.
+This is a validation filter. In the template add this validation '{validate form="submit_link"
+field="fieldname" criteria='ValidateWithPlugins' message=$smarty.capture.plugin_error}'
+where fieldname is the text field name to be validated
+EOD;
+    }
+    /**
+     * Multiple copies of this plugin can exist.
+     */
+    public function AllowMultiple( ) {
+        return true;
+    }
+    /**
+     * Get a list of options this module provides
+     * Child classes should add their options to this array
+     * @return array One line per option, each line is an array:
+     *         'Name': option name,
+     *         'Display name': option name formatted for user,
+     *         'Value': current value
+     *         'Type': Bool, Integer, Url, Text, or Enumeration array
+     *         'Description': Text
+     */
+    public function enumerate_options() {
+        return array_merge( parent::enumerate_options(),
+                            array( array( 'Expression', 'Expression', $this->Expression, 'Text', "Pattern to ban"),
+                                   array( 'Rule', 'Rule', $this->Rule,
+                                          array(0=>'Require',
+                                                1=>'Forbid'), "Should URLs be accepted"),
+                                   array( 'ErrorMessage', 'Error Message', $this->ErrorMessage, 'Text', "Message to display on error. Blank gets a generated message"),
+                                   array( 'Test', 'Test', $this->Test, array( 'all'=>'Whole field', 'domain'=>'Domain name'),'What should be tested' )
+                            )
+                );
+    }
+
+    public function __construct( $anchor ) {
+        parent::__construct( $anchor );
+        $this->Expression='\.';
+        $this->Rule=0;
+        $this->Test='domain';
+        $this->ErrorMessage='';
+    }
+    /**
+     * Set an option
+     * Child classes should update their options from recognised options
+     * and pass anything they don't understand to their parent classes
+     */
+    public function set_option( $name, $value ) {
+        switch( $name ) {
+            case 'Rule' : $this->Rule = (int) $value;     break;
+            default : parent::set_option( $name, $value );
+        }
+    }
+    /**
+     * Called after loading plugins from the database to insert their callbacks
+     * into the control structures used to implement fetchValues
+     */
+    public function register_callbacks() {
+        $this->RegisterFilter( 'SmartyValidateAny', array( $this, 'Validate'));
+        parent::register_callbacks();
+    }
+
+    /**
+     * Called to perform any required processing
+     * by template engine.
+     * The overridden register_callbacks should have registered us to perform
+     * these task
+     */
+    public function Validate( PluginFilterParameters $args ) {
+        if( $args->callersArgs[1]!='' && FALSE !== stripos($args->callersArgs[3]['field'], 'url') ) {
+            if( $this->Test=='domain') {
+                $parts = parse_url($args->callersArgs[1]);
+                if (isset( $parts['host']))
+                    $toTest=  $parts['host'];
+                else
+                    $toTest='';
+            } else {
+                $toTest=$args->callersArgs[1];
+            }
+            $ans = preg_match( "/$this->Expression/i", $toTest);
+            if( FALSE === $ans ) {
+                    $args->error = true;
+                    $args->errorMessage.="Plugin error.";
+            } elseif( 0 === $ans ) {
+                if( $this->Rule == 0 ) {
+                    $args->error = true;
+                    if( $this->ErrorMessage=='')
+                        $args->errorMessage.="Does not match {$this->Expression}. ";
+                    else
+                        $args->errorMessage.=$this->ErrorMessage.'. ';
+                }
+            } else {
+                if( $this->Rule == 1 ) {
+                    $args->error = true;
+                    if( $this->ErrorMessage=='')
+                        $args->errorMessage.="Should not match {$this->Expression}. ";
+                    else
+                        $args->errorMessage.=$this->ErrorMessage.'. ';
+                }
+            }
+        }
+    }
+}
