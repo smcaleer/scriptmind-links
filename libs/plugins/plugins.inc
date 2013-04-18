@@ -60,6 +60,9 @@ class PluginFilterParameters {
     /** @var bool Stop running other filters. May be set by a
      * filter encountering an error or providing a definitive answer */
     public $stop = false;
+    public function __construct( $callersArgs) {
+        $this->callersArgs = $callersArgs;
+    }
 }
 
 /**
@@ -246,11 +249,9 @@ abstract class Plugin {
 
     /*
      * Static function to call all registered providers of a named filter
-     * @return array(string) Result
+     * @return PluginFilterParameters Result
      */
-    public static function runFilters( $taskName ) {
-        $args = new PluginFilterParameters();
-        $args->callersArgs = func_get_args();
+    public static function runFiltersInternal( $taskName, PluginFilterParameters $args ) {
         if(array_key_exists($taskName, self::$filters)) {
             // NB $args->callersArgs[0] == $taskName. I left this
             // in place to allow one callback to handle multiple tasks.
@@ -261,6 +262,15 @@ abstract class Plugin {
         }
         return $args;
     }
+
+    /*
+     * Static function to call all registered providers of a named filter
+     * @return PluginFilterParameters Result
+     */
+    public static function runFilters( $taskName ) {
+        return self::runFiltersInternal($taskName, new PluginFilterParameters(func_get_args()) );
+    }
+
     /**
     * Create the serialised data
     * Derrived classes that have private data that shouldn't be saved should process it:
@@ -301,6 +311,7 @@ abstract class Plugin {
     public function set_option( $name, $value ) {
         switch( $name ) {
             case 'Active' : $this->Active = (bool)$value;     break;
+            default: $this->$name = $value;
         }
     }
     /**
@@ -420,29 +431,32 @@ abstract class Plugin {
         $plugins = Plugin::load( $anchor, "1=1", false );
         foreach( $plugins as $plugin) {
             $id=$plugin->ID;
-            $pluginNames[get_class($plugin)] = $plugin;
             if( $plugin->Active) {
                 $activePlugins[ $id ] = $plugin;
             } else{
                 $inactivePlugins[ $id ] = $plugin;
             }
             $installedPlugins[ $id ] = $plugin;
-            if( $plugin->AllowMultiple()) {
-                $unusedPlugins[] = Plugin::create(get_class($plugin), $anchor);
+            $pluginName=get_class($plugin);
+            if( $plugin->AllowMultiple() && !array_key_exists($pluginName, $pluginNames)) {
+                $unusedPlugins[] = Plugin::create($pluginName, $anchor);
             }
+            $pluginNames[$pluginName] = $plugin;
         }
-        $dir=Plugin::$pluginDir."/*/*.plugin";
-        $ans = glob( $dir );
-        foreach ( $ans as $filename) {
-            $filename=substr($filename, strlen(Plugin::$pluginDir)+1 );
-            $pluginName = substr($filename, 0, strpos($filename, '/'));
-            if(!array_key_exists($pluginName, $pluginNames)) {
-                try {
-                    $unusedPlugins[] = Plugin::create($pluginName, $anchor);
-                }
-                catch (Exception $ex)
-                {
-                    $failedPlugins[] = $pluginName . " - ". $ex->getMessage();
+        foreach( array(Plugin::$pluginDir."/*.plugin", Plugin::$pluginDir."/*/*.plugin") as $dir ) {
+            $ans = glob( $dir );
+            foreach ( $ans as $filename) {
+                $filename=substr($filename, strlen(Plugin::$pluginDir)+1 );
+                $pluginName = substr($filename, strpos($filename, '/'));
+                $pluginName = substr( $filename, 0, strpos( $pluginName, '.plugin'));
+                if(!array_key_exists($pluginName, $pluginNames)) {
+                    try {
+                        $unusedPlugins[] = Plugin::create($pluginName, $anchor);
+                    }
+                    catch (Exception $ex)
+                    {
+                        $failedPlugins[] = $pluginName . " - ". $ex->getMessage();
+                    }
                 }
             }
         }

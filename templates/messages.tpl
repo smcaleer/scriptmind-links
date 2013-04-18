@@ -1,5 +1,6 @@
 {strip}
 {assign var=yes_no value=[1=>"{l}Yes{/l}",0=>"{l}No{/l}"]}
+{capture name='plugin_error'}<span class="error">ERROR</span>{/capture}{*Not translated - plugin should translate*}
 {capture name='field_char_required'}<span class="error">{l}This field is required.{/l}</span>{/capture}
 {capture name='field_pass_required'}<span class="error">{l}This field is required.{/l}</span>{/capture}
 {capture name='field_num_required'}<span class="error">{l}Required numeric field.{/l}</span>{/capture}

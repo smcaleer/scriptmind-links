@@ -26,16 +26,18 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#                 Portions copyright 2012-2013 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################
 */
 
 require_once 'init.php';
+
+/* @var $tpl SmartyBC */
 # Load reCaptcha
 require_once 'libs/recaptcha/recaptchalib.php';
-
-
+require_once 'libs/plugins/SmartyPluginsInterface.inc';
 //Make an additional check if client is allowed to post/submit
 //[Spam] protection
 require_once 'include/check_post_rules.php';
@@ -45,8 +47,8 @@ $post_rules_unauthorized = check_post_rules($_POST);
 $price = array ();
 if (PAY_ENABLE == '1' && PAYPAL_ACCOUNT != '')
 {
-	if (FTR_ENABLE == '1' && PAY_FEATURED > 0)
-   {
+    if (FTR_ENABLE == '1' && PAY_FEATURED > 0)
+    {
 		$price['featured'] = PAY_FEATURED;
 	}
 	if (PAY_NORMAL > 0)
@@ -112,44 +114,46 @@ $CategoryID = ($CategoryID > 0 ? $CategoryID : 0); //Make sure the category ID i
 
 if (empty ($_REQUEST['submit']))
 {
-	if (!empty ($_SERVER['HTTP_REFERER']))
-		$_SESSION['return'] = $_SERVER['HTTP_REFERER'];
+    if (!empty ($_SERVER['HTTP_REFERER']))
+        $_SESSION['return'] = $_SERVER['HTTP_REFERER'];
 
-	$data = array ();
-   $data['CATEGORY_ID'] = $CategoryID;
+    $data = array ();
+    $data['CATEGORY_ID'] = $CategoryID;
 	$data['RECPR_REQUIRED'] = $recpr_required;
 
-   SmartyValidate :: disconnect();
+    SmartyValidate :: disconnect();
 	SmartyValidate :: connect($tpl);
+    SmartyValidate::set_form('submit_link');
 	SmartyValidate :: register_form('submit_link', true);
 
+    SmartyValidate :: register_criteria('ValidateWithPlugins' , 'SmartyValidateByPlugin', 'submit_link');
 	SmartyValidate :: register_criteria('isValueUnique' , 'validate_unique'    , 'submit_link');
-   SmartyValidate :: register_criteria('isUrlUnique'   , 'validateUrlUnique'  , 'submit_link');
+    SmartyValidate :: register_criteria('isUrlUnique'   , 'validateUrlUnique'  , 'submit_link');
 	SmartyValidate :: register_criteria('isNotEqual'    , 'validate_not_equal' , 'submit_link');
 	SmartyValidate :: register_criteria('isURLOnline'   , 'validate_url_online', 'submit_link');
-   SmartyValidate :: register_criteria('isRecprDomain' , 'validate_recpr_link_dom', 'submit_link');
-   SmartyValidate :: register_criteria('isRecprOnline' , 'validate_recpr_link', 'submit_link');
-   SmartyValidate :: register_criteria('isCaptchaValid', 'validate_captcha'   , 'submit_link');
+    SmartyValidate :: register_criteria('isRecprDomain' , 'validate_recpr_link_dom', 'submit_link');
+    SmartyValidate :: register_criteria('isRecprOnline' , 'validate_recpr_link', 'submit_link');
+    SmartyValidate :: register_criteria('isCaptchaValid', 'validate_captcha'   , 'submit_link');
 
-   SmartyValidate :: register_validator('v_TITLE'         , 'TITLE', 'notEmpty'  , false, false, 'trim', 'submit_link');
-   SmartyValidate :: register_validator('v_TITLE_U'       , 'TITLE:link::CATEGORY_ID'.$EditUnique, 'isValueUnique', false, false, null, 'submit_link');
+    SmartyValidate :: register_validator('v_TITLE'         , 'TITLE', 'notEmpty'  , false, false, 'trim', 'submit_link');
+    SmartyValidate :: register_validator('v_TITLE_U'       , 'TITLE:link::CATEGORY_ID'.$EditUnique, 'isValueUnique', false, false, null, 'submit_link');
 
-   SmartyValidate :: register_validator('v_URL'           , 'URL', 'isURL'       , false, false, 'trim', 'submit_link');
-   SmartyValidate :: register_validator('v_URL_ONLINE'    , 'URL', 'isURLOnline' , false, false,  null , 'submit_link');
-   SmartyValidate :: register_validator('v_URL_U'         , 'URL:link'.(ALLOW_MULTIPLE ? '::CATEGORY_ID' : ':'), 'isUrlUnique', false, false, null, 'submit_link');
+    SmartyValidate :: register_validator('v_URL'           , 'URL', 'isURL'       , false, false, 'trim', 'submit_link');
+    SmartyValidate :: register_validator('v_URL_ONLINE'    , 'URL', 'isURLOnline' , false, false,  null , 'submit_link');
+    SmartyValidate :: register_validator('v_URL_U'         , 'URL:link'.(ALLOW_MULTIPLE ? '::CATEGORY_ID' : ':'), 'isUrlUnique', false, false, null, 'submit_link');
 
-   SmartyValidate :: register_validator('v_CATEGORY_ID'   , 'CATEGORY_ID:0'      , 'isNotEqual', false, false, null, 'submit_link');
+    SmartyValidate :: register_validator('v_CATEGORY_ID'   , 'CATEGORY_ID:0'      , 'isNotEqual', false, false, null, 'submit_link');
 
-   SmartyValidate :: register_validator('v_RECPR_URL'     , 'RECPR_URL'          , 'isURL'         , ($recpr_required ? false : true), false, 'trim', 'submit_link');
-   SmartyValidate :: register_validator('v_RECPR_ONLINE'  , 'RECPR_URL'          , 'isURLOnline'   , ($recpr_required ? false : true), false, null, 'submit_link');
-   SmartyValidate :: register_validator('v_RECPR_LINK'    , 'RECPR_URL'          , 'isRecprOnline' , ($recpr_required ? false : true), false, null, 'submit_link');
-   SmartyValidate :: register_validator('v_RECPR_DOMAIN'  , 'RECPR_URL'          , 'isRecprDomain' , ($recpr_required ? false : true), false, null, 'submit_link');
+    SmartyValidate :: register_validator('v_RECPR_URL'     , 'RECPR_URL'          , 'isURL'         , ($recpr_required ? false : true), false, 'trim', 'submit_link');
+    SmartyValidate :: register_validator('v_RECPR_ONLINE'  , 'RECPR_URL'          , 'isURLOnline'   , ($recpr_required ? false : true), false, null, 'submit_link');
+    SmartyValidate :: register_validator('v_RECPR_LINK'    , 'RECPR_URL'          , 'isRecprOnline' , ($recpr_required ? false : true), false, null, 'submit_link');
+    SmartyValidate :: register_validator('v_RECPR_DOMAIN'  , 'RECPR_URL'          , 'isRecprDomain' , ($recpr_required ? false : true), false, null, 'submit_link');
 
-   SmartyValidate :: register_validator('v_OWNER_NAME' , 'OWNER_NAME'         , 'notEmpty'      , false, false, 'trim', 'submit_link');
-   SmartyValidate :: register_validator('v_OWNER_EMAIL', 'OWNER_EMAIL'        , 'isEmail'       , false, false, 'trim', 'submit_link');
+    SmartyValidate :: register_validator('v_OWNER_NAME' , 'OWNER_NAME'         , 'notEmpty'      , false, false, 'trim', 'submit_link');
+    SmartyValidate :: register_validator('v_OWNER_EMAIL', 'OWNER_EMAIL'        , 'isEmail'       , false, false, 'trim', 'submit_link');
 
-   if (count ($price) > 0)
-      SmartyValidate :: register_validator('v_LINK_TYPE'  , 'LINK_TYPE'          , 'notEmpty'      , false, false, 'trim', 'submit_link');
+    if (count ($price) > 0)
+        SmartyValidate :: register_validator('v_LINK_TYPE'  , 'LINK_TYPE'          , 'notEmpty'      , false, false, 'trim', 'submit_link');
    // Deeplink URL Validation
    for($dl=1; $dl<=5; $dl++)
    SmartyValidate :: register_validator('v_DEEPLINK_URL' . $dl, 'URL' . $dl, 'isURL' , true, false, 'trim', 'submit_link');
@@ -159,6 +163,7 @@ if (empty ($_REQUEST['submit']))
 else
 {
 	SmartyValidate :: connect($tpl);
+    SmartyValidate::set_form('submit_link');
 	$data = get_table_data('link');
 
 	$data['STATUS']         = 1;
@@ -282,5 +287,5 @@ $tpl->assign('topcats', $topcats);
 $tpl->loadFilter('output', 'trimwhitespace');
 
 //Make output
-echo $tpl->fetch('submit.tpl', $id);
+$tpl->display('submit.tpl', $id);
 ?>
