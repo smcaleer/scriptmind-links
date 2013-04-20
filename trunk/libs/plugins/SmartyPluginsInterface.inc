@@ -34,6 +34,33 @@
 require_once __DIR__.'/plugins.inc';
 
 /**
+ * Base class for filters run as SmartyValidate criteria
+ *
+ * @author Bruce Clement
+ */
+abstract class SmartyPluginValidator extends Plugin {
+    public $ErrorMessage;
+    public function __construct( $anchor ) {
+        parent::__construct( $anchor );
+        $this->ErrorMessage='';
+    }
+    public function enumerate_options() {
+        return array_merge( parent::enumerate_options(),
+                            array( array( 'ErrorMessage', 'Error Message',
+                                          $this->ErrorMessage, 'Text',
+                                          "Message to display on error. Blank gets a generated message") ) );
+    }
+    public function SetError( PluginFilterParameters $args, $defaultMessage, $stop=false) {
+        $args->error = true;
+        if( $this->ErrorMessage=='')
+            $args->errorMessage.=$defaultMessage.'. ';
+        else
+            $args->errorMessage.=$this->ErrorMessage.'. ';
+        if( $stop )
+            $args->stop = true;
+    }
+}
+/**
  * Interface to allow plugin filters to be run as validators from Smarty template
  * engine on known fields.
  * The filters to be called should have registered themselves as either

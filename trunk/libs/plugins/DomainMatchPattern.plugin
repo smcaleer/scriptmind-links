@@ -36,17 +36,16 @@
 # @package        ScriptMind::Plugins
 # ######################################################################
 */
-
+require_once __DIR__.'/SmartyPluginsInterface.inc';
 /**
- * Generic place fixed text in places
+ * Verify the url or domain name against regular expressions
  *
  * @author Bruce Clement
  */
-class DomainMatchPattern extends Plugin {
+class DomainMatchPattern extends SmartyPluginValidator {
     public $Expression;
     public $Rule;
     public $Test;
-    public $ErrorMessage;
     /**
      * Provides a description of the module for the admin plugins page
      */
@@ -80,7 +79,6 @@ EOD;
                                    array( 'Rule', 'Rule', $this->Rule,
                                           array(0=>'Require',
                                                 1=>'Forbid'), "Should URLs be accepted"),
-                                   array( 'ErrorMessage', 'Error Message', $this->ErrorMessage, 'Text', "Message to display on error. Blank gets a generated message"),
                                    array( 'Test', 'Test', $this->Test, array( 'all'=>'Whole field', 'domain'=>'Domain name'),'What should be tested' )
                             )
                 );
@@ -91,7 +89,6 @@ EOD;
         $this->Expression='\.';
         $this->Rule=0;
         $this->Test='domain';
-        $this->ErrorMessage='';
     }
     /**
      * Set an option
@@ -132,23 +129,15 @@ EOD;
             }
             $ans = preg_match( "/$this->Expression/i", $toTest);
             if( FALSE === $ans ) {
-                    $args->error = true;
-                    $args->errorMessage.="Plugin error.";
+                    $this->ErrorMessage='';
+                    $this->SetError($args, "Plugin Error");
             } elseif( 0 === $ans ) {
                 if( $this->Rule == 0 ) {
-                    $args->error = true;
-                    if( $this->ErrorMessage=='')
-                        $args->errorMessage.="Does not match {$this->Expression}. ";
-                    else
-                        $args->errorMessage.=$this->ErrorMessage.'. ';
+                    $this->SetError($args, "Does not match {$this->Expression}");
                 }
             } else {
                 if( $this->Rule == 1 ) {
-                    $args->error = true;
-                    if( $this->ErrorMessage=='')
-                        $args->errorMessage.="Should not match {$this->Expression}. ";
-                    else
-                        $args->errorMessage.=$this->ErrorMessage.'. ';
+                    $this->SetError($args, "Should not match {$this->Expression}");
                 }
             }
         }
