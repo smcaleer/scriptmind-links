@@ -70,8 +70,9 @@ if ($db->Connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME))
    set_defaults();
     /** @var ModuleAnchor */
     $anchor = makePluginAnchor();
-    $where = 'ACTIVE=1 AND ADMIN_HOOKS=1';
-    Plugin::load($anchor, $where, true);
+    $PluginWhere = 'ACTIVE=1 AND ADMIN_HOOKS=1';
+    Plugin::load($anchor, $PluginWhere, true);
+    unset( $PluginWhere );
 }
 else
 {
