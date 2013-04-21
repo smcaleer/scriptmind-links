@@ -95,6 +95,7 @@
 				{l}Title 1{/l}:
 			</label>
 			<input type="text" id="title1" name="TITLE1" value="{$TITLE1|escape|trim}" size="40" maxlength="255" class="text" />
+            {validate form="submit_link" field="TITLE1" criteria='ValidateWithPlugins' message=$smarty.capture.plugin_error}
 
 			<label for="URL1">
 				{l}URL 1{/l}:
@@ -108,6 +109,7 @@
 				{l}Title 2{/l}:
 			</label>
 			<input type="text" id="title2" name="TITLE2" value="{$TITLE2|escape|trim}" size="40" maxlength="255" class="text" />
+            {validate form="submit_link" field="TITLE2" criteria='ValidateWithPlugins' message=$smarty.capture.plugin_error}
 
 			<label for="URL2">
 				{l}URL 2{/l}:
@@ -120,6 +122,7 @@
 				{l}Title 3{/l}:
 			</label>
 			<input type="text" id="title3" name="TITLE3" value="{$TITLE3|escape|trim}" size="40" maxlength="255" class="text" />
+            {validate form="submit_link" field="TITLE3" criteria='ValidateWithPlugins' message=$smarty.capture.plugin_error}
 
 			<label for="URL3">
 				{l}URL 3{/l}:
@@ -132,6 +135,7 @@
 				{l}Title 4{/l}:
 			</label>
 			<input type="text" id="title4" name="TITLE4" value="{$TITLE4|escape|trim}" size="40" maxlength="255" class="text" />
+            {validate form="submit_link" field="TITLE4" criteria='ValidateWithPlugins' message=$smarty.capture.plugin_error}
 
 			<label for="URL4">
 				{l}URL 4{/l}:
@@ -144,6 +148,7 @@
 				{l}Title 5{/l}:
 			</label>
 			<input type="text" id="title5" name="TITLE5" value="{$TITLE5|escape|trim}" size="40" maxlength="255" class="text" />
+            {validate form="submit_link" field="TITLE5" criteria='ValidateWithPlugins' message=$smarty.capture.plugin_error}
 
 			<label for="URL5">
 				{l}URL 5{/l}:
@@ -158,6 +163,7 @@
 		</label>
 
 		<textarea id="DESCRIPTION" name="DESCRIPTION" rows="3" cols="37" class="text">{$DESCRIPTION|escape|trim}</textarea>
+        {validate form="submit_link" field="DESCRIPTION" criteria='ValidateWithPlugins' message=$smarty.capture.plugin_error}
 
 
 		<label for="OWNER_NAME">

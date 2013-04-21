@@ -53,7 +53,7 @@ class DomainMatchPattern extends SmartyPluginValidator {
         return <<<EOD
 Require or forbid a domain name to match a regular expression.
 This is a validation filter. In the template add this validation '{validate form="submit_link"
-field="fieldname" criteria='ValidateWithPlugins' message=$smarty.capture.plugin_error}'
+field="fieldname" criteria='ValidateWithPlugins' message=\$smarty.capture.plugin_error}'
 where fieldname is the text field name to be validated
 EOD;
     }

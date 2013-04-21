@@ -1,0 +1,210 @@
+<?php
+/**
+# ######################################################################
+# Project:     ScriptMind::Plugins: Version 0.0.1
+# **********************************************************************
+# Copyright (C) 2013 Bruce Clement. (http://www.clement.co.nz/)
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public License (LGPL)
+# as published by the Free Software Foundation; either version 3
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received copies of the GNU General Public License and the
+# GNU Lesser General Public License along with this program; if not, write to
+# the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
+#
+# Please note that the terms of the LGPL version 3 permit relicencing under
+# the terms of GNU General Public License (GPL) version 3.
+# It is both anticipated and encouraged that people using this plugin as
+# source for their own plugins may choose to relicence it under the GPL.
+# **********************************************************************
+#
+# For questions, help, comments, discussion, etc., please join the
+# ScriptMind::Links Forum
+#
+# @link           http://www.scriptmind.org/
+# @copyright      2013 Bruce Clement. (http://www.clement.co.nz/)
+# @license http://URL LGPLv3 or later
+# @projectManager Bruce Clement
+# @package        ScriptMind::Plugins
+# ######################################################################
+*/
+require_once __DIR__.'/SmartyPluginsInterface.inc';
+/**
+ * Disallow text that is either not standard English or in one or more
+ *  specified scripts
+ *
+ * @author Bruce Clement
+ */
+class BanLanguages extends SmartyPluginValidator {
+    /**
+     * @var boolean Ban all non-English
+     */
+    public $All;
+    /**
+     * @var array(strings) PCRE script codes to ban
+     */
+    public $Scripts;
+    /**
+     * @var array(strings) replacement PCRE script codes to ban.
+     * Not usually set except when retrieving answers from plugin config screen
+     */
+    public $NewScripts; // Not usually set
+    /**
+     * Provides a description of the module for the admin plugins page
+     */
+    public function describe( ) {
+        return <<<EOD
+Forbid input containing characters in foreign scripts.
+Either choose to ban all non-English scripts, or individual scripts.
+Initially only a space for one script is shown.
+Once you have selected and saved one script a space for a second script is shown and so-on.<br/>
+This is a validation filter. In the template add this validation '{validate form="submit_link"
+field="fieldname" criteria='ValidateWithPlugins' message=\$smarty.capture.plugin_error}'
+where fieldname is the text field name to be validated
+EOD;
+    }
+    /**
+     * Get a list of options this module provides
+     * Child classes should add their options to this array
+     * @return array One line per option, each line is an array:
+     *         'Name': option name,
+     *         'Display name': option name formatted for user,
+     *         'Value': current value
+     *         'Type': Bool, Integer, Url, Text, or Enumeration array
+     *         'Description': Text
+     */
+    public function enumerate_options() {
+        // List of available scripts as listed http://www.php.net/manual/en/regexp.reference.unicode.php
+        // Even though many of these are obscure in the extreme I have decided not to editorialise
+        $availableScriptsRaw = array(
+            '_', // Dummy first entry, indicates "Delete this line"
+            'Arabic',       'Armenian',     'Avestan',      'Balinese',     'Bamum',
+            'Batak',        'Bengali',      'Bopomofo',     'Brahmi',       'Braille',
+            'Buginese',     'Buhid',        'Canadian_Aboriginal',          'Carian',      'Chakma',
+            'Cham',         'Cherokee',     'Common',       'Coptic',       'Cuneiform',
+            'Cypriot',      'Cyrillic',     'Deseret',      'Devanagari',   'Egyptian_Hieroglyphs',
+            'Ethiopic',     'Georgian',     'Glagolitic',   'Gothic',       'Greek',
+            'Gujarati',     'Gurmukhi',     'Han',  'Hangul',       'Hanunoo',
+            'Hebrew',       'Hiragana',     'Imperial_Aramaic',     'Inherited',   'Inscriptional_Pahlavi',
+            'Inscriptional_Parthian',       'Javanese',     'Kaithi',       'Kannada',      'Katakana',
+            'Kayah_Li',     'Kharoshthi',   'Khmer',        'Lao',  'Latin',
+            'Lepcha',       'Limbu',        'Linear_B',     'Lisu', 'Lycian',
+            'Lydian',       'Malayalam',    'Mandaic',      'Meetei_Mayek', 'Meroitic_Cursive',
+            'Meroitic_Hieroglyphs', 'Miao', 'Mongolian',    'Myanmar',      'New_Tai_Lue',
+            'Nko',  'Ogham',        'Old_Italic',   'Old_Persian',  'Old_South_Arabian',
+            'Old_Turkic',   'Ol_Chiki',     'Oriya',        'Osmanya',      'Phags_Pa',
+            'Phoenician',   'Rejang',       'Runic',        'Samaritan',    'Saurashtra',
+            'Sharada',      'Shavian',      'Sinhala',      'Sora_Sompeng', 'Sundanese',
+            'Syloti_Nagri', 'Syriac',       'Tagalog',      'Tagbanwa',     'Tai_Le',
+            'Tai_Tham',     'Tai_Viet',     'Takri',        'Tamil',        'Telugu',
+            'Thaana',       'Thai', 'Tibetan',      'Tifinagh',     'Ugaritic',
+            'Vai',  'Yi' );
+        $availableScripts=array_combine($availableScriptsRaw, str_replace('_',' ',$availableScriptsRaw) );
+        $options = parent::enumerate_options();
+        $options[]=array( 'All', 'All', (int)$this->All, 'Bool', "Should All non-English be banned");
+        $scriptText=<<<TEXT
+Select individual scripts to ban. <br/>
+NB: There are not individual entries for Russian, Ukrainian, Serbian as they are all covered by Cyrillic.<br/>
+English and other Western European scripts can be banned by selecting Latin.<br/>
+For Chinese, select Han<br/>
+Japanese, on the other hand is covered by two separate texts Katakana and Hiragana<br/>
+TEXT;
+        $maxSeq=-1;
+        foreach ($this->Scripts as $seq=>$script) {
+            $options[]=array('Script_'.$seq, 'Script '.($seq+1), $script, $availableScripts,$scriptText);
+            $scriptText="";
+            $maxSeq=max($maxSeq,$seq);
+        }
+        $seq=$maxSeq+1;
+        $options[]=array('Script_'.$seq, 'Script '.($seq+1), '', $availableScripts,$scriptText);
+        return $options;
+    }
+
+    public function __construct( $anchor ) {
+        parent::__construct( $anchor );
+        $this->All=true;
+        $this->Scripts=array();
+        $this->NewScripts=null;
+    }
+    /**
+     * Set an option
+     * If scripts are specified store into a temporary array
+     * that is moved back into the scripts array before saving
+     */
+    public function set_option( $name, $value ) {
+        switch( substr($name,0,7) ) {
+            case 'All' :
+                $this->All = (bool) $value;
+                break;
+            case 'Script_' :
+                if( !(isset($this->NewScripts) && is_array($this->NewScripts)) )
+                    $this->NewScripts=array();
+                $ScriptNr = (int)substr($name,7);
+                if( $value != '_') {
+                    $this->NewScripts[$ScriptNr] = $value;
+                }
+                break;
+            default : parent::set_option( $name, $value );
+        }
+    }
+    /**
+     * Called before saving to the database to move the temporary
+     * (new) scripts array back into the scripts array;
+     *
+     */
+    public function before_save( &$state ) {
+        if( isset($this->NewScripts)) {
+            sort($this->NewScripts);
+            // To close up gaps in the indexing we move back one at a time
+            $this->Scripts = array();
+            foreach ($this->NewScripts as $script) {
+                $this->Scripts[] = $script;
+            }
+            unset($this->NewScripts);
+        }
+        parent::before_save( $state );
+    }
+    /**
+     * Called after loading plugins from the database to insert their callbacks
+     * into the control structures used to implement fetchValues
+     */
+    public function register_callbacks() {
+        $this->RegisterFilter( 'SmartyValidateAny', array( $this, 'Validate'));
+        parent::register_callbacks();
+    }
+
+    /**
+     * Called by template engine to perform any required processing.
+     * The overridden register_callbacks should have registered us to perform
+     * these task
+     */
+    public function Validate( PluginFilterParameters $args ) {
+        $toTest = $args->callersArgs[1];
+        if( $toTest!='' ) {
+            $pattern='';
+            if( $this->All) {
+                // Forbid everything except printable ascii, newlines, tabs and currency codes.
+                $pattern = '^ -~\r\n\t₳฿₵¢₡₢₠₫₯€ƒ₣₲₴₭ℳ₥₦₧₱₰£₹₨₪₸₮₩¥", $toTest)';
+            } else {
+                foreach ($this->Scripts as $script) {
+                    $pattern .= '\p{'.$script.'}';
+                }
+            }
+            $ans = preg_match( "/[$pattern]/u", $toTest );
+            if( FALSE === $ans ) {
+                    $this->ErrorMessage='';
+                    $this->SetError($args, "Plugin Error");
+            } elseif( 0 !== $ans ) {
+                    $this->SetError($args, "Is not valid text");
+            }
+        }
+    }
+}
