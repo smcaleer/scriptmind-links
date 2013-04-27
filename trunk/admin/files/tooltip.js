@@ -34,6 +34,7 @@ var TTWnd=null;
 
 function tooltip_init(){
 	 var a = document.getElementsByTagName("a");
+     var i = 0;
  for(i=0; i<a.length; i++){
  	if(a[i].className == "htt" && a[i].id != ""){
  		sp_addEvt(a[i], 'mouseover', sp_showTT);

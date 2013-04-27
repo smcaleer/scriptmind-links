@@ -14,11 +14,11 @@
      <th>{l}Value{/l}</th>
   </tr>
   <tr class="odd">
-     <td>{l}Active Links{/l}</td>
+     <td><a href="dir_links.php?r=1">{l}Active Links{/l}</a></td>
      <td>{$stats[0]}</td>
   </tr>
   <tr class="even">
-     <td>{l}Pending Links{/l}</td>
+     <td><a href="dir_approve_links.php?r=1">{l}Pending Links{/l}</a></td>
      <td>{$stats[1]}</td>
   </tr>
   <tr class="odd">
@@ -26,15 +26,15 @@
      <td>{$stats[2]}</td>
   </tr>
   <tr class="even">
-     <td>{l}Categories{/l}</td>
+     <td><a href="dir_categs.php?r=1">{l}Categories{/l}</a></td>
      <td>{$stats[3]}</td>
   </tr>
   <tr class="odd">
-     <td>{l}Sent Emails{/l}</td>
+     <td><a href="email_sent_view.php?r=1">{l}Sent Emails{/l}</a></td>
      <td>{$stats[4]}</td>
   </tr>
   <tr class="even">
-     <td>{l}Email Templates{/l}</td>
+     <td><a href="email_message.php?r=1">{l}Email Templates{/l}</a></td>
      <td>{$stats[5]}</td>
   </tr>
 </table>

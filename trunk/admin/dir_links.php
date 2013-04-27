@@ -26,6 +26,7 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#                 Portions copyright 2013 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################
@@ -46,9 +47,11 @@ elseif($_SESSION[SCRIPT_NAME]['c'])
 if($c)
 {
 	$where = " WHERE CATEGORY_ID = ".$db->qstr($c);
+    $tpl->assign('CATEGORY_ID', $c);
 }
 else
 {
+    $tpl->assign('CATEGORY_ID', 0);
 	if (isset ($where))
    {
 		$where .= ' AND '.($_REQUEST['f'] == '1' ? '' : 'NOT').$featured_where;
@@ -58,6 +61,10 @@ else
 		$where = 'WHERE '.($_REQUEST['f']=='1' ? '' : 'NOT').$featured_where;
 	}
 }
+if( $_SERVER['REQUEST_METHOD'] == 'POST')
+    do_bulk_link_actions($c);
+$categs = get_categs_tree($db, 0);
+$tpl->assign('categs', $categs);
 $tpl->assign('featured', $_REQUEST['f']=='1');
 $tpl->assign('ENABLE_REWRITE', ENABLE_REWRITE);
 $tpl->assign('stats', array (0 => _L('Inactive'), 1 => _L('Pending'), 2 => _L('Active'),));
@@ -71,7 +78,7 @@ if (PAY_ENABLE)
 }
 $columns = array_merge ($columns, array('CATEGORY' => _L('Category'), 'STATUS' => _L('Status'), 'HITS' => _L('Hits'), 'DATE_ADDED' => _L('Date Added')));
 $tpl->assign('columns', $columns);
-$tpl->assign('col_count', count ($columns) + 2);
+$tpl->assign('col_count', count ($columns) + 3);
 $orderBy = ' ORDER BY FEATURED DESC';
 
 if (defined('SORT_FIELD') && SORT_FIELD != '')

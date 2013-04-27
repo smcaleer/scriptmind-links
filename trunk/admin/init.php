@@ -44,6 +44,104 @@ if( defined('USE_INTSMARTY' ) )
 require_once 'libs/smarty/SmartyValidate.class.php';
 require_once 'libs/adodb/adodb.inc.php';
 
+/**
+ * Perform bulk link actions for link edit and link approve pages
+ * @author Bruce Clement (http://www.clement.co.nz)
+ * @copyright (c) 2013, Bruce Clement
+ * @license http://URL GPL V2 or later
+ */
+function do_bulk_link_actions($category) {
+    global $db, $tables, $tpl;
+    /* @var $db ADOConnection */
+    /* @var $tpl Smarty */
+    if( $_POST['submit']=='Go' && $_POST['BulkConfirm']=='Confirmed') {
+        $affected=$_POST['BulkDom'];
+        $toCat=null;
+
+        if(is_array($affected)) {
+            $bulkWhere =  preg_replace('`[^0-9, ]`', '', implode(',', $affected) );
+            switch ($_POST['BulkAction']) {
+                case 'newcategory':
+                    $cat_name = array_key_exists('BulkNewCategory', $_POST) ? $_POST['BulkNewCategory'] : '';
+                    if( empty($cat_name)) {
+                        $tpl->assign('sql_error', 'Category name required');
+                        break;
+                    }
+                    $data = array ();
+                    $data['TITLE'] = $cat_name;
+                    $data['TITLE_URL'] = preg_replace('`[^\w_-]`', '_', $cat_name);
+                    $data['DESCRIPTION'] = '';
+                    $data['PARENT_ID'] = empty($category) ? 0 : $category;
+                    $data['STATUS'] = 2;
+                    $data['SYMBOLIC'] = 0;
+                    $data['SYMBOLIC_ID'] = 0;
+                    $data['DATE_ADDED'] = gmdate ('Y-m-d H:i:s');
+                    $data['ID']=$toCat=$db->GenID($tables['category']['name'].'_SEQ');
+                    if ($db->Replace($tables['category']['name'], $data, 'ID', true) == 0) {
+                        $tpl->assign('sql_error', $db->ErrorMsg());
+                        break;
+                    }
+                    // Drop through to next case
+                case 'category':
+                    if( is_null( $toCat ) ) {
+                        $toCat = array_key_exists('BulkCategory', $_POST) ? $_POST['BulkCategory'] : '';
+                    }
+                    if( empty($toCat)) {
+                        $tpl->assign('sql_error', 'Please select a category');
+                        break;
+                    }
+                    $sql='Update '.$tables['link']['name'].' set CATEGORY_ID = '.
+                         preg_replace('`[^0-9]`', '', $toCat ) .
+                         ' where ID in ( '.$bulkWhere.' )';
+                    if( ! $ans=$db->Execute($sql) )
+                        $tpl->assign('sql_error', $db->ErrorMsg());
+                    break;
+
+                case 'status':
+                    $status = array_key_exists('BulkStatus', $_POST)
+                              ? preg_replace('`[^0-9]`', '', $_POST['BulkStatus']) : '';
+
+                    if( $status == '') { // Can't use empty as 0 is valid
+                        $tpl->assign('sql_error', 'Please select  status');
+                        break;
+                    }
+                    $sql='Update '.$tables['link']['name'].' set STATUS = '.
+                         $status .
+                         ' where ID in ( '.$bulkWhere.' )';
+                    if( ! $ans=$db->Execute($sql) )
+                        $tpl->assign('sql_error', $db->ErrorMsg());
+                    break;
+
+                case 'delete':
+                    $sql='Delete from '.$tables['link']['name'].
+                         ' where ID in ( '.$bulkWhere.' )';
+                    if( ! $ans=$db->Execute($sql) )
+                        $tpl->assign('sql_error', $db->ErrorMsg());
+                    /*************** NB *************
+                     * dir_links_edit does this when deleting
+                     * Should consider doing this here?
+                        $data = $db->GetRow("SELECT * FROM `{$tables['link']['name']}` WHERE `ID` = ".$db->qstr($id));
+                        if ($db->Execute("DELETE FROM `{$tables['link']['name']}` WHERE `ID` = ".$db->qstr($id)))
+                      {
+                            $data['STATUS'] = 0;
+                            send_status_notifications($data, false);
+                            if (isset ($_SESSION['return']))
+                         {
+                                @ header('Location: '.$_SESSION['return']);
+                                @ exit ();
+                            }
+                        }
+                      else
+                      {
+                            $tpl->assign('sql_error', $db->ErrorMsg());
+                        }
+                     */
+                    break;
+            }
+        }
+    }
+}
+
 session_start();
 
 if (get_magic_quotes_gpc())
