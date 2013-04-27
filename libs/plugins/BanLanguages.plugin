@@ -148,7 +148,7 @@ TEXT;
                 if( !(isset($this->NewScripts) && is_array($this->NewScripts)) )
                     $this->NewScripts=array();
                 $ScriptNr = (int)substr($name,7);
-                if( $value != '_') {
+                if( $value != '' && $value != '_') {
                     $this->NewScripts[$ScriptNr] = $value;
                 }
                 break;

@@ -11,6 +11,9 @@
    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
    <script src="{$smarty.const.ADMIN_TEMPLATE_DIR}/jqtransform/jquery.jqtransform.js" type="text/javascript"></script>
    <script src="{$smarty.const.ADMIN_TEMPLATE_DIR}/js/script.js" type="text/javascript"></script>
+   <script type="text/javascript" src="files/browser.js"></script>
+   <script type="text/javascript" src="files/tooltip.js"></script>
+   <script type="text/javascript" src="files/pop-list.js"></script>
 </head>
 <body>
 <div id="body-container">

@@ -26,12 +26,16 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
+#                 Portions copyright 2013 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################
 */
 
 require_once 'init.php';
+
+if( $_SERVER['REQUEST_METHOD'] == 'POST')
+    do_bulk_link_actions('0');
 
 $tpl->assign('ENABLE_REWRITE', ENABLE_REWRITE);
 
@@ -87,6 +91,9 @@ else
 	$list = $rs->GetAssoc(true);
 }
 $tpl->assign('list', $list);
+
+$categs = get_categs_tree($db, 0);
+$tpl->assign('categs', $categs);
 
 $content = $tpl->fetch('dir_approve_links.tpl');
 $tpl->assign('content', $content);

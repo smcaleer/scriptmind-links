@@ -46,7 +46,7 @@ try {
 }
 
 if( ! CONFIG_EXISTS ) {
-    // Configureation file doesn't exist
+    // Configuration file doesn't exist
     // Need to add in the minimal config
     //  Add our installation path to the include_path
     define ('INSTALL_PATH', substr (__file__, 0, -17));

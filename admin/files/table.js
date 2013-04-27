@@ -33,6 +33,7 @@
 
 function tableInit(){
 	var td = document.getElementsByTagName("td");
+    var i = 0;
 	for(i=0; i<td.length; i++){
         if(td[i].className == "listHeader" && td[i].id != ""){
             td[i].onmouseover = headerOver;
