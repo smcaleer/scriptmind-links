@@ -164,7 +164,7 @@ else
 {
 	SmartyValidate :: connect($tpl);
     SmartyValidate::set_form('submit_link');
-	$data = get_table_data('link');
+	$data = get_table_data('link', true);
 
 	$data['STATUS']         = 1;
 	$data['IPADDRESS']      = get_client_ip();
@@ -181,9 +181,6 @@ else
 	$data['LAST_CHECKED']  = gmdate ('Y-m-d H:i:s');
 	$data['DATE_ADDED']    = gmdate ('Y-m-d H:i:s');
 	$data['DATE_MODIFIED'] = gmdate ('Y-m-d H:i:s');
-	$data['DESCRIPTION'] = strip_tags($data['DESCRIPTION']);
-	$data['TITLE'] = strip_tags($data['TITLE']);
-	$data['OWNER_NAME'] = strip_tags($data['OWNER_NAME']);
 
    if (strlen (trim ($data['URL'])) > 0 && !preg_match ('#^http[s]?:\/\/#i', $data['URL']))
       $data['URL'] = "http://".$data['URL'];
