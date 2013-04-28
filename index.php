@@ -93,12 +93,12 @@ if (!empty ($_REQUEST['p']) && array_key_exists ($_REQUEST['p'], $available_opti
 			$path[] = array ('ID' => '0', 'TITLE' => _L('Top Hits'), 'TITLE_URL' => '', 'DESCRIPTION' => '');
 			break;
 	}
-	$tpl->assign('p', $_REQUEST['p']);
+	$tpl->assign('p', trim (strip_tags($_REQUEST['p'])));
 
 }
-elseif (isset ($_REQUEST['q']) && !empty ($_REQUEST['q']) && strlen (trim ($_REQUEST['q'])) > 2)
-{
-	$q = $db->qstr('%'.preg_replace('`\s+`','%', trim ($_REQUEST['q'])).'%');
+elseif (isset ($_REQUEST['q']) && !empty ($_REQUEST['q']) && strlen (trim ($_REQUEST['q'])) > 2){
+    $_REQUEST['q']=  trim (strip_tags($_REQUEST['q']));
+	$q = $db->qstr('%'.preg_replace('`\s+`','%', $_REQUEST['q']).'%');
 	if (FTR_ENABLE)
    {
 		$feat_links = $db->GetAll("SELECT * FROM `{$tables['link']['name']}` WHERE `STATUS` = '2' AND (`URL` LIKE {$q} OR `TITLE` LIKE {$q} OR `DESCRIPTION` LIKE {$q}) AND `FEATURED` = '1' {$expire_where} ORDER BY `EXPIRY_DATE` DESC");

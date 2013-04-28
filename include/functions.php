@@ -173,20 +173,28 @@ function _L($str) {
  * Extracts from the global variable $_REQUEST only the values those keys correspond to table column names
  *
  * @param string $table table name
+ * @param bool $striptags strip html tags
  * @return array associative array
  * @author dcb
  *
  */
-function get_table_data($table) {
+function get_table_data($table, $striptags = false) {
 	global $tables;
 	$data = array ();
-	foreach ($tables[$table]['fields'] as $col => $v)
-   {
-		if (isset ($_REQUEST[$col]))
-      {
-			$data[$col] = $_REQUEST[$col];
-		}
-	}
+    if( $striptags ) {
+        foreach ($tables[$table]['fields'] as $col => $v) {
+            if (isset ($_REQUEST[$col])) {
+                $data[$col] = strip_tags($_REQUEST[$col]);
+            }
+        }
+
+    } else {
+        foreach ($tables[$table]['fields'] as $col => $v) {
+            if (isset ($_REQUEST[$col])) {
+                $data[$col] = $_REQUEST[$col];
+            }
+        }
+    }
 	return $data;
 }
 
