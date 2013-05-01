@@ -9,9 +9,7 @@
 			{if !$smarty.foreach.path.last}
 				<a href="{if $smarty.const.ENABLE_REWRITE}{$current_path}{else}index.php?c={$cat.ID}{/if}">{$cat.TITLE|escape|trim}</a>
 				{else}
-				<a href="{$smarty.const.DOC_ROOT}">
 					{$cat.TITLE|escape|trim}
-				</a>
 			{/if}
 		{/foreach}
 	</div>

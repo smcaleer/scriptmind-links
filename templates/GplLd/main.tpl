@@ -36,10 +36,17 @@
 				<h3>{l}Categories{/l}</h3>
 			{/if}
 
+            {assign var="current_path" value=""}
+            {if $smarty.const.ENABLE_REWRITE}
+                {foreach from=$path item=cat name=path}
+                    {assign var="current_path" value="`$current_path``$cat.TITLE_URL`/"}
+                {/foreach}
+            {/if}
+
 			{foreach from=$categs item=cat name=categs}
 				<div class="categories">
 				{if $category.ID gt 0}<h4>{else}<h3>{/if}
-					<a href="{if $smarty.const.ENABLE_REWRITE}{$cat.TITLE_URL|escape}/{else}index.php?c={$cat.ID}{/if}">
+					<a href="{if $smarty.const.ENABLE_REWRITE}{$current_path}{$cat.TITLE_URL|escape}/{else}index.php?c={$cat.ID}{/if}">
 						{$cat.TITLE|escape}
 					</a>
 					{if $smarty.const.CATS_COUNT}
@@ -52,7 +59,7 @@
 				<ul class="sub-categories">
 					{foreach from=$cat.SUBCATS item=scat name=scategs}
 						<li>
-							<a href="{if $smarty.const.ENABLE_REWRITE}{$cat.TITLE_URL|escape}/{$scat.TITLE_URL|escape}/{else}index.php?c={$scat.ID}{/if}">
+							<a href="{if $smarty.const.ENABLE_REWRITE}{$current_path}{$cat.TITLE_URL|escape}/{$scat.TITLE_URL|escape}/{else}index.php?c={$scat.ID}{/if}">
 								{$scat.TITLE|escape}
 							</a>
 						</li>
