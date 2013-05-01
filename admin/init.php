@@ -72,6 +72,17 @@ function do_bulk_link_actions($category) {
                     $data['TITLE_URL'] = preg_replace('`[^\w_-]`', '_', $cat_name);
                     $data['DESCRIPTION'] = '';
                     $data['PARENT_ID'] = empty($category) ? 0 : $category;
+                    $existing=$db->GetOne("Select count(*) from ".$tables['category']['name']." Where TITLE_URL=".
+                                          $db->qstr($data['TITLE_URL'])." and PARENT_ID=" .
+                                          $db->qstr($data['PARENT_ID']));
+                    if( false === $existing ) {
+                        $tpl->assign('sql_error', $db->ErrorMsg());
+                        break;
+                    }
+                    if( 0 < (int) $existing ) {
+                        $tpl->assign('Category already exists');
+                        break;
+                    }
                     $data['STATUS'] = 2;
                     $data['SYMBOLIC'] = 0;
                     $data['SYMBOLIC_ID'] = 0;
