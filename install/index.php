@@ -26,7 +26,7 @@
 #
 # @link           http://www.phplinkdirectory.com/
 # @copyright      2004-2006 NetCreated, Inc. (http://www.netcreated.com/)
-#                 Portions copyright 2012 Bruce Clement (http://www.clement.co.nz/)
+#                 Portions copyright 2012-2013 Bruce Clement (http://www.clement.co.nz/)
 # @projectManager David DuVal <david@david-duval.com>
 # @package        PHPLinkDirectory
 # ######################################################################
@@ -70,8 +70,8 @@ require_once 'install/config.php';
 if( defined( 'USE_INTSMARTY' ))
     require_once 'libs/intsmarty/intsmarty.class.php';
 require_once 'libs/smarty/SmartyValidate.class.php';
-require_once 'libs/adodb/adodb.inc.php';
 require_once 'include/version.php';
+require_once 'include/data_upgrade.php';
 
 $fn = INSTALL_PATH.'temp/templates';
 if (!is_writable ($fn))
@@ -590,7 +590,7 @@ function install_db($db_details) {
       $tpl->assign('form_error', $ret);
       return 0;
    }
-   $ret = create_db($db_details['db_driver'], $db_details['db_host'], $db_details['db_name'], $db_details['db_user'], $db_details['db_password']);
+   $ret = create_db(true, $db_details['db_driver'], $db_details['db_host'], $db_details['db_name'], $db_details['db_user'], $db_details['db_password']);
    if (!$ret[0])
    {
       // Database creation error
@@ -655,116 +655,6 @@ function create_admin($admin_details) {
    return 1;
 }
 
-/**
- * creates or updates the database structure based on the structure defined in tables.php
- *
- * @param string $db_type database type
- * @param string $db_host database host
- * @param string $db_name dabase name
- * @param string $db_user database login
- * @param string $db_password database password
- * @return int 0 if succesfull, error code otherwise
- */
-
-function create_db($db_type, $db_host, $db_name, $db_user, $db_password)
-{
-   global $tables;
-   $db = ADONewConnection($db_type);
-   $db_created = 0;
-   if (!$db->Connect($db_host, $db_user, $db_password))
-      return array (false, 'INSTALL_ERROR_CONNECT', $db->ErrorMsg());
-
-   $db = ADONewConnection($db_type);
-   if (!$db->Connect($db_host, $db_user, $db_password, $db_name))
-   {
-      $db = ADONewConnection($db_type);
-      if ($db->Connect($db_host, $db_user, $db_password))
-      {
-         $dict = NewDataDictionary($db);
-         $sql_array = $dict->CreateDatabase($db_name);
-         if ($sql_array)
-            $db_created = $dict->ExecuteSQLArray($sql_array);
-      }
-      if ($db_created != 2)
-         return array (false, 'INSTALL_ERROR_CREATE_DB', $db->ErrorMsg());
-
-      $db->SelectDB($db_name);
-   }
-   #$db->debug = true;
-   $tables_existing = $db->MetaTables('TABLES');
-   $dict = NewDataDictionary($db);
-   foreach ($tables as $table_key => $table)
-   {
-      $table_name = $table['name'];
-
-      //Drop all previous indexes
-      $ListIndex = $db->GetAll("SHOW INDEX FROM `{$table_name}`");
-      if (is_array ($ListIndex) && !empty ($ListIndex))
-      {
-         foreach ($ListIndex as $index_key => $index)
-         {
-            //Keep primary keys
-            if ($index['Key_name'] != 'PRIMARY')
-               $db->Execute("DROP INDEX `{$index['Key_name']}` ON `{$table_name}`");
-
-            unset ($index, $ListIndex[$index_key]);
-         }
-      }
-
-      if (is_array ($table['fields']))
-      {
-         $fields = array ();
-         foreach ($table['fields'] as $field_name => $field_def)
-            $fields[] = $field_name.' '.$field_def;
-
-         $created = 0;
-         if ($sql_array = $dict->ChangeTableSQL($table_name, implode(',', $fields)))
-            $created = $dict->ExecuteSQLArray($sql_array);
-
-         if ($created != 2)
-            return array (false, 'INSTALL_ERROR_CREATE', $db->ErrorMsg());
-      }
-      if (is_array ($table['indexes']))
-      {
-         $indexes_existing = $db->MetaIndexes($table_name);
-         foreach ($table['indexes'] as $index_name => $index_def)
-         {
-            $index_name = $table_name.'_'.$index_name.'_IDX';
-            $index_opts = array ();
-            if (is_array ($index_def))
-            {
-               $index_fields = $index_def[0];
-               $index_opts = explode(' ', $index_def[1]);
-            }
-            else
-               $index_fields = $index_def;
-
-            if (array_key_exists ($index_name, $indexes_existing) || array_key_exists (strtolower ($index_name), $indexes_existing))
-               if ($sql_array = $dict->CreateIndexSQL($index_name, $table_name, $index_fields, array_merge($index_opts, array ('DROP'))))
-                  $dict->ExecuteSQLArray($sql_array);
-
-            $created = 0;
-            if ($sql_array = $dict->CreateIndexSQL($index_name, $table_name, $index_fields, $index_opts))
-               $created = $dict->ExecuteSQLArray($sql_array);
-
-            if($created != 2)
-               return array (false, 'INSTALL_ERROR_CREATE', $db->ErrorMsg());
-         }
-      }
-      if (is_array ($table['data']))
-      {
-         foreach ($table['data'] as $row)
-         {
-            $sql = "SELECT `ID` FROM `{$table_name}` WHERE `ID` = '{$row['ID']}'";
-            $rs = $db->SelectLimit($sql, 1);
-            if ($rs && $rs->EOF)
-               if (!$db->AutoExecute($table_name, $row, 'INSERT', false, true, true))
-                  return array (false, 'INSTALL_ERROR_CREATE', $db->ErrorMsg());
-         }
-      }
-   }
-   return array (true, $db_created == 0 ? 'INSTALL_DB_UPDATED' : 'INSTALL_DB_CREATED');
-}
 
 function update_config($file_name, $values)
 {
@@ -798,4 +688,3 @@ function update_config($file_name, $values)
    @ fclose ($f);
    return true;
 }
-?>
