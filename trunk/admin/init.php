@@ -188,6 +188,15 @@ else
 	define('ERROR', 'ERROR_DB_CONNECT');
 }
 
+if( (!defined( 'CURRENT_SCHEMA' ) || (int)CURRENT_SCHEMA < (int)REQUIRED_SCHEMA ) &&
+     ! defined('DOING_UPGRADE') ){
+?><html><head><title>Upgrade required</title></head>
+<body><h1>Upgrade Required</h1><p>Scriptmind::Links has been upgraded.
+You must now run the <a href="<?php echo DOC_ROOT?>/upgrade.php">upgrade program in your admin section</a>
+to update the database to the current version.</p></body></html><?php
+exit;
+}
+
 if (DEBUG===1)
 {
 	set_log('admin_log.txt');

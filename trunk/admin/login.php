@@ -32,6 +32,7 @@
 # ######################################################################
 */
 define('FORBID_AUTO_LOGIN', true); // Bad idea to mix auto login with the login screen
+define('DOING_UPGRADE', true); // Not strictly true, but need to login to do upgrade
 require_once 'init.php';
 
 //Clear the entire cache
